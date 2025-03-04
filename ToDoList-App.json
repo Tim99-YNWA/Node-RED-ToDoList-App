@@ -1,0 +1,3746 @@
+[
+    {
+        "id": "113dc517988d056f",
+        "type": "subflow",
+        "name": "Add Item (File Variant)",
+        "info": "",
+        "category": "storage",
+        "in": [
+            {
+                "x": 60,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "0f6bf508ada33fc8"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 420,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "0f6bf508ada33fc8",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99",
+        "icon": "node-red/file.svg"
+    },
+    {
+        "id": "0f6bf508ada33fc8",
+        "type": "file",
+        "z": "113dc517988d056f",
+        "name": "Append Item To File",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 240,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f3972da6c7fb241a",
+        "type": "subflow",
+        "name": "Delete Item (File Variant)",
+        "info": "",
+        "category": "storage",
+        "in": [
+            {
+                "x": 40,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "54e9897030033abd"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 2340,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "569fecde72c56266",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99",
+        "icon": "node-red/file.svg"
+    },
+    {
+        "id": "54e9897030033abd",
+        "type": "change",
+        "z": "f3972da6c7fb241a",
+        "name": "Save the index & Nav",
+        "rules": [
+            {
+                "t": "set",
+                "p": "index",
+                "pt": "flow",
+                "to": "index",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "nav",
+                "pt": "flow",
+                "to": "nav",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 240,
+        "y": 80,
+        "wires": [
+            [
+                "9b8f6ad63e95309e"
+            ]
+        ]
+    },
+    {
+        "id": "e95f7b02724518d7",
+        "type": "change",
+        "z": "f3972da6c7fb241a",
+        "name": "Restore the index",
+        "rules": [
+            {
+                "t": "set",
+                "p": "index",
+                "pt": "msg",
+                "to": "index",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1250,
+        "y": 80,
+        "wires": [
+            [
+                "9fb97153a1a2205b"
+            ]
+        ]
+    },
+    {
+        "id": "9b8f6ad63e95309e",
+        "type": "file in",
+        "z": "f3972da6c7fb241a",
+        "name": "Read items.txt",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "format": "lines",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 440,
+        "y": 80,
+        "wires": [
+            [
+                "10c741380f4aee35"
+            ]
+        ]
+    },
+    {
+        "id": "09d94077eb30014f",
+        "type": "join",
+        "z": "f3972da6c7fb241a",
+        "name": "Collate the messages into an array",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 1000,
+        "y": 80,
+        "wires": [
+            [
+                "e95f7b02724518d7"
+            ]
+        ]
+    },
+    {
+        "id": "10c741380f4aee35",
+        "type": "switch",
+        "z": "f3972da6c7fb241a",
+        "name": "EOF?",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 590,
+        "y": 80,
+        "wires": [
+            [
+                "ddd5f2bd3baa0839"
+            ],
+            [
+                "f4e9f6203be47eb3"
+            ]
+        ]
+    },
+    {
+        "id": "ddd5f2bd3baa0839",
+        "type": "change",
+        "z": "f3972da6c7fb241a",
+        "name": "Complete",
+        "rules": [
+            {
+                "t": "set",
+                "p": "complete",
+                "pt": "msg",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 740,
+        "y": 40,
+        "wires": [
+            [
+                "09d94077eb30014f"
+            ]
+        ]
+    },
+    {
+        "id": "f4e9f6203be47eb3",
+        "type": "json",
+        "z": "f3972da6c7fb241a",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 730,
+        "y": 80,
+        "wires": [
+            [
+                "09d94077eb30014f"
+            ]
+        ]
+    },
+    {
+        "id": "9fb97153a1a2205b",
+        "type": "function",
+        "z": "f3972da6c7fb241a",
+        "name": "Delete Item",
+        "func": "// FUNCTION\n// A function to delete the nth item in the items array\n//\n// INPUTS \n// msg.index - The index of the item to be deleted\n//\n// OUTPUTS\n// msg.payload : The updated array of items\n//\nvar items = msg.payload || [];\nvar n = Number(msg.index)\n// Delete the nth element of an array\nvar updatedItems = items.slice(0, n).concat(items.slice(n + 1));\nmsg.payload = updatedItems;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1430,
+        "y": 80,
+        "wires": [
+            [
+                "a3e99e963890e571"
+            ]
+        ]
+    },
+    {
+        "id": "c2e9b8518ba22bcc",
+        "type": "file",
+        "z": "f3972da6c7fb241a",
+        "name": "Append to items.txt",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1910,
+        "y": 80,
+        "wires": [
+            [
+                "569fecde72c56266"
+            ]
+        ]
+    },
+    {
+        "id": "c0e60dfedb806b8b",
+        "type": "split",
+        "z": "f3972da6c7fb241a",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1750,
+        "y": 80,
+        "wires": [
+            [
+                "c2e9b8518ba22bcc"
+            ]
+        ]
+    },
+    {
+        "id": "a3e99e963890e571",
+        "type": "file",
+        "z": "f3972da6c7fb241a",
+        "name": "Delete items.txt",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "delete",
+        "encoding": "none",
+        "x": 1600,
+        "y": 80,
+        "wires": [
+            [
+                "c0e60dfedb806b8b"
+            ]
+        ]
+    },
+    {
+        "id": "569fecde72c56266",
+        "type": "change",
+        "z": "f3972da6c7fb241a",
+        "name": "Restore the index & Nav",
+        "rules": [
+            {
+                "t": "set",
+                "p": "index",
+                "pt": "msg",
+                "to": "index",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "nav",
+                "pt": "msg",
+                "to": "nav",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2130,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "456d3f8f336fc951",
+        "type": "subflow",
+        "name": "Update Item (File Variant)",
+        "info": "",
+        "category": "storage",
+        "in": [
+            {
+                "x": 40,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "e3a9a9eb95ce0b5a"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 2600,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "027826f44f60de72",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99",
+        "icon": "node-red/file.svg"
+    },
+    {
+        "id": "e3a9a9eb95ce0b5a",
+        "type": "change",
+        "z": "456d3f8f336fc951",
+        "name": "Save the index, Nav & newItem",
+        "rules": [
+            {
+                "t": "set",
+                "p": "index",
+                "pt": "flow",
+                "to": "index",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "nav",
+                "pt": "flow",
+                "to": "nav",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "newItem",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 250,
+        "y": 100,
+        "wires": [
+            [
+                "99708d0c1b8633b0"
+            ]
+        ]
+    },
+    {
+        "id": "7e5c40431cbfa80f",
+        "type": "change",
+        "z": "456d3f8f336fc951",
+        "name": "Restore the index & newItem",
+        "rules": [
+            {
+                "t": "set",
+                "p": "index",
+                "pt": "msg",
+                "to": "index",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "newItem",
+                "pt": "msg",
+                "to": "newItem",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1370,
+        "y": 100,
+        "wires": [
+            [
+                "220c81b644c6dadf"
+            ]
+        ]
+    },
+    {
+        "id": "99708d0c1b8633b0",
+        "type": "file in",
+        "z": "456d3f8f336fc951",
+        "name": "Read items.txt",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "format": "lines",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 500,
+        "y": 100,
+        "wires": [
+            [
+                "e40f13e12b10d489"
+            ]
+        ]
+    },
+    {
+        "id": "16a8633c56034c50",
+        "type": "join",
+        "z": "456d3f8f336fc951",
+        "name": "Collate the messages into an array",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 1080,
+        "y": 100,
+        "wires": [
+            [
+                "7e5c40431cbfa80f"
+            ]
+        ]
+    },
+    {
+        "id": "e40f13e12b10d489",
+        "type": "switch",
+        "z": "456d3f8f336fc951",
+        "name": "EOF?",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 670,
+        "y": 100,
+        "wires": [
+            [
+                "86a6bf1149428b10"
+            ],
+            [
+                "537e48bda4c601c4"
+            ]
+        ]
+    },
+    {
+        "id": "86a6bf1149428b10",
+        "type": "change",
+        "z": "456d3f8f336fc951",
+        "name": "Complete",
+        "rules": [
+            {
+                "t": "set",
+                "p": "complete",
+                "pt": "msg",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 820,
+        "y": 60,
+        "wires": [
+            [
+                "16a8633c56034c50"
+            ]
+        ]
+    },
+    {
+        "id": "537e48bda4c601c4",
+        "type": "json",
+        "z": "456d3f8f336fc951",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 810,
+        "y": 100,
+        "wires": [
+            [
+                "16a8633c56034c50"
+            ]
+        ]
+    },
+    {
+        "id": "220c81b644c6dadf",
+        "type": "function",
+        "z": "456d3f8f336fc951",
+        "name": "Update Item",
+        "func": "// FUNCTION\n// A function to delete the nth item in the items array\n//\n// INPUTS \n// msg.index - The index of the item to be updated\n// msg.newItem - The updated item\n//\n// OUTPUTS\n// msg.payload : The updated array of items\n//\nvar items = msg.payload || [];\nvar n = Number(msg.index)\n// Update the nth element of an array\nitems[n] = msg.newItem;\nmsg.payload = items;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1610,
+        "y": 100,
+        "wires": [
+            [
+                "57a57f66bb9a5cea"
+            ]
+        ]
+    },
+    {
+        "id": "acb24b52e110d93f",
+        "type": "file",
+        "z": "456d3f8f336fc951",
+        "name": "Append to items.txt",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 2170,
+        "y": 100,
+        "wires": [
+            [
+                "027826f44f60de72"
+            ]
+        ]
+    },
+    {
+        "id": "2c478b0ff88d3b71",
+        "type": "split",
+        "z": "456d3f8f336fc951",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 2010,
+        "y": 100,
+        "wires": [
+            [
+                "acb24b52e110d93f"
+            ]
+        ]
+    },
+    {
+        "id": "57a57f66bb9a5cea",
+        "type": "file",
+        "z": "456d3f8f336fc951",
+        "name": "Delete items.txt",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "delete",
+        "encoding": "none",
+        "x": 1860,
+        "y": 100,
+        "wires": [
+            [
+                "2c478b0ff88d3b71"
+            ]
+        ]
+    },
+    {
+        "id": "027826f44f60de72",
+        "type": "change",
+        "z": "456d3f8f336fc951",
+        "name": "Restore the index & Nav",
+        "rules": [
+            {
+                "t": "set",
+                "p": "index",
+                "pt": "msg",
+                "to": "index",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "nav",
+                "pt": "msg",
+                "to": "nav",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2390,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b049e1c1ebe24c93",
+        "type": "subflow",
+        "name": "Get Item Details (File Variant)",
+        "info": "",
+        "category": "storage",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "2137a54c1c09bd88"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1300,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "8f2dae0b73660157",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99",
+        "icon": "node-red/file.svg"
+    },
+    {
+        "id": "5db170b52eb64b8b",
+        "type": "file in",
+        "z": "b049e1c1ebe24c93",
+        "name": "Read items.txt",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "format": "lines",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 440,
+        "y": 80,
+        "wires": [
+            [
+                "523e0dce67dd4b9c"
+            ]
+        ]
+    },
+    {
+        "id": "7011addd5e6b73ab",
+        "type": "switch",
+        "z": "b049e1c1ebe24c93",
+        "name": "Match Index?",
+        "property": "parts.index",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "index",
+                "vt": "flow"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 760,
+        "y": 80,
+        "wires": [
+            [
+                "1bf39b8a05ac9fb4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "1bf39b8a05ac9fb4",
+        "type": "json",
+        "z": "b049e1c1ebe24c93",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 930,
+        "y": 80,
+        "wires": [
+            [
+                "8f2dae0b73660157"
+            ]
+        ]
+    },
+    {
+        "id": "523e0dce67dd4b9c",
+        "type": "switch",
+        "z": "b049e1c1ebe24c93",
+        "name": "EOF?",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 590,
+        "y": 80,
+        "wires": [
+            [],
+            [
+                "7011addd5e6b73ab"
+            ]
+        ]
+    },
+    {
+        "id": "2137a54c1c09bd88",
+        "type": "change",
+        "z": "b049e1c1ebe24c93",
+        "name": "Remember the index",
+        "rules": [
+            {
+                "t": "set",
+                "p": "index",
+                "pt": "flow",
+                "to": "index",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 240,
+        "y": 80,
+        "wires": [
+            [
+                "5db170b52eb64b8b"
+            ]
+        ]
+    },
+    {
+        "id": "8f2dae0b73660157",
+        "type": "change",
+        "z": "b049e1c1ebe24c93",
+        "name": "Restore the index",
+        "rules": [
+            {
+                "t": "set",
+                "p": "index",
+                "pt": "msg",
+                "to": "index",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1110,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f44bcc2212e6a685",
+        "type": "subflow",
+        "name": "Get Items (File Variant)",
+        "info": "",
+        "category": "storage",
+        "in": [
+            {
+                "x": 140,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "b152c0da8786b59e"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1100,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "7895c44fa236baa2",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99",
+        "icon": "node-red/file.svg"
+    },
+    {
+        "id": "b152c0da8786b59e",
+        "type": "file in",
+        "z": "f44bcc2212e6a685",
+        "name": "Read items.txt",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "format": "lines",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 320,
+        "y": 120,
+        "wires": [
+            [
+                "6a7d978d4fd35add"
+            ]
+        ]
+    },
+    {
+        "id": "7895c44fa236baa2",
+        "type": "join",
+        "z": "f44bcc2212e6a685",
+        "name": "Collate the messages into an array",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 880,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6a7d978d4fd35add",
+        "type": "switch",
+        "z": "f44bcc2212e6a685",
+        "name": "EOF?",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 470,
+        "y": 120,
+        "wires": [
+            [
+                "94d486623f9da5af"
+            ],
+            [
+                "9f785855055c18db"
+            ]
+        ]
+    },
+    {
+        "id": "94d486623f9da5af",
+        "type": "change",
+        "z": "f44bcc2212e6a685",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "complete",
+                "pt": "msg",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 640,
+        "y": 80,
+        "wires": [
+            [
+                "7895c44fa236baa2"
+            ]
+        ]
+    },
+    {
+        "id": "9f785855055c18db",
+        "type": "json",
+        "z": "f44bcc2212e6a685",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 610,
+        "y": 120,
+        "wires": [
+            [
+                "7895c44fa236baa2"
+            ]
+        ]
+    },
+    {
+        "id": "368dca3c8504b329",
+        "type": "tab",
+        "label": "Item Mgt",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "aff99f9392aa1350",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "Display Items",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "c8405deeeaedbe94",
+            "fcad38fa2baabbef",
+            "212d90cae4132e91",
+            "0c9e3b61c7c70cf4",
+            "87bc3ac7198c582a",
+            "7f7a7ffad559db6a",
+            "d1b5bbf872161667"
+        ],
+        "x": 84,
+        "y": 1079,
+        "w": 1012,
+        "h": 142
+    },
+    {
+        "id": "593d5c7386216e2a",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "Display Item Details",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "7e6dbf60b0a40668",
+            "a7708b59e6548ad7",
+            "09ed02241447d40b",
+            "dda2a2b4823e1ae7",
+            "11744eb1f5892bb4",
+            "ed06df27d169ef82"
+        ],
+        "x": 94,
+        "y": 1259,
+        "w": 1012,
+        "h": 142
+    },
+    {
+        "id": "5e16978c52562be5",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "Add Item",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "1dac222538497690",
+            "4c2f2d465d34ab05",
+            "4471c9645330e260",
+            "1cab3a02330d48cd",
+            "9ccfd7f85007f1e2",
+            "a8f5c2f3eb3fb625",
+            "350f22cc35e9c388"
+        ],
+        "x": 94,
+        "y": 1439,
+        "w": 1292,
+        "h": 182
+    },
+    {
+        "id": "dd2bcaacc7849c0e",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "Edit Item",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "acad0055e0fd99db",
+            "15e461c7838cbbf5",
+            "34741c814e6fbdd5",
+            "cb6a965ba11e6531",
+            "3c5695da4cc4286d",
+            "3430431895f2335e",
+            "33630cc8bc245ea9",
+            "0a7fc821604c3ec1"
+        ],
+        "x": 94,
+        "y": 1659,
+        "w": 1292,
+        "h": 182
+    },
+    {
+        "id": "0711f2ffaad25b9a",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "Delete Item",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "6dd56e4d1fabcd1d",
+            "d13d9ae8aaf7799e",
+            "4b8861199af88f49",
+            "ab13a699103fa709",
+            "9359fdb60b041e69",
+            "943b78cbf7740535",
+            "4f3c544860532f36"
+        ],
+        "x": 104,
+        "y": 1879,
+        "w": 1272,
+        "h": 182
+    },
+    {
+        "id": "0da72b93a919c6b8",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "Splash Screen",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "0479fba1264634ea",
+            "f4c62e9c97700c74",
+            "af4589a2734989bd",
+            "6b3e9783ff92b5ab",
+            "3157781a828ff5d2",
+            "39946f2941854991",
+            "0683b0711644daa0"
+        ],
+        "x": 94,
+        "y": 899,
+        "w": 1232,
+        "h": 122
+    },
+    {
+        "id": "f966a0567ce5eefb",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "Navigation Service",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "e40874527901d6a7",
+            "9e5d1983e23efa4f",
+            "3112039f46017ce2",
+            "6e91ef38de4af29c",
+            "565753aa1e9b3987",
+            "0a6ed28587f48423",
+            "139f2aa61112bbb8",
+            "b784b40b69f7709c",
+            "60e22d941c198804",
+            "0c88af563de40c0a",
+            "6abb508768e80cf9",
+            "15c9a85165f3d373",
+            "ea75e08cfce79270",
+            "cda29bc591cbf3f1",
+            "72b777207378526a",
+            "9b507bd4cf867441",
+            "d7cd274fbd42b768",
+            "eb6c943110d417d5",
+            "3a0dcccc8a4ed5cf",
+            "bdc73666eef75de8",
+            "75cc0d68f4d11b2f",
+            "0a69609b8805e158",
+            "483a33eeb3dc3eeb",
+            "d538763f849eabf4",
+            "13b16d4833be11b6",
+            "3cd0663451ad52d7",
+            "92d29dc9484fd66c",
+            "0b5f4c76383339a8",
+            "1d7ceab3f776b392",
+            "2ee54f623e211bf4",
+            "8f749da4429a6ac1",
+            "14f354c957ee416d",
+            "3b6719f3655bb583",
+            "c1c6e215aa999377",
+            "a191de5af0f6b8dd"
+        ],
+        "x": 114,
+        "y": 2159,
+        "w": 1392,
+        "h": 682
+    },
+    {
+        "id": "4d58bad55cb14d1e",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "App Styling",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "3c7e05ead13aab1c"
+        ],
+        "x": 94,
+        "y": 499,
+        "w": 192,
+        "h": 82
+    },
+    {
+        "id": "7f304afe3af6560e",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "Resources",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "0e57d492e174eb63",
+            "76be666bd6358ac3",
+            "7aca0fd5d4b7b4fe",
+            "e0d0fbbbefdc4947",
+            "2e70fedfc2533c6c",
+            "149ac467d70347fa"
+        ],
+        "x": 134,
+        "y": 2959,
+        "w": 872,
+        "h": 282
+    },
+    {
+        "id": "8cdbf647dc9603dc",
+        "type": "group",
+        "z": "368dca3c8504b329",
+        "name": "Initialise App Data",
+        "style": {
+            "label": true,
+            "stroke": "none",
+            "fill": "#f8f8f8"
+        },
+        "nodes": [
+            "ce3126643e312ff0",
+            "6608ceb58338a88c",
+            "58af83c16d4175d7",
+            "8c70c667a7a15534",
+            "41a0517ffb4273bc",
+            "cebfa2e0256ecf12",
+            "6485631ad0813071",
+            "b72109143573ebc8",
+            "6a9e1286b40e8905",
+            "aa660814079c7a58"
+        ],
+        "x": 94,
+        "y": 619,
+        "w": 1112,
+        "h": 202
+    },
+    {
+        "id": "1497ac7940169cd4",
+        "type": "comment",
+        "z": "368dca3c8504b329",
+        "name": "AN ITEM MANAGEMENT APP",
+        "info": "",
+        "x": 230,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "c8405deeeaedbe94",
+        "type": "function",
+        "z": "368dca3c8504b329",
+        "g": "aff99f9392aa1350",
+        "name": "Get Items (Flow Variant)",
+        "func": "var items = flow.get(\"items\") || [];\nmsg.payload = items;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 1120,
+        "wires": [
+            [
+                "7f7a7ffad559db6a"
+            ]
+        ]
+    },
+    {
+        "id": "7e6dbf60b0a40668",
+        "type": "function",
+        "z": "368dca3c8504b329",
+        "g": "593d5c7386216e2a",
+        "name": "Get Item Details (Flow Variant)",
+        "func": "var items = flow.get(\"items\") || [];\nvar index = Number(msg.index);\nvar item = items[index];\nmsg.payload = item;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 1300,
+        "wires": [
+            [
+                "09ed02241447d40b"
+            ]
+        ]
+    },
+    {
+        "id": "a7708b59e6548ad7",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "593d5c7386216e2a",
+        "name": "Display Item Details",
+        "links": [
+            "139f2aa61112bbb8",
+            "3887fde5f6d59eff",
+            "890d1278b211ed5c"
+        ],
+        "x": 135,
+        "y": 1300,
+        "wires": [
+            [
+                "7e6dbf60b0a40668",
+                "ed06df27d169ef82"
+            ]
+        ]
+    },
+    {
+        "id": "1dac222538497690",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "5e16978c52562be5",
+        "name": "Save Item?",
+        "property": "nav.command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "cancel",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "save",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 760,
+        "y": 1500,
+        "wires": [
+            [
+                "1cab3a02330d48cd"
+            ],
+            [
+                "4471c9645330e260",
+                "350f22cc35e9c388"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4c2f2d465d34ab05",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "5e16978c52562be5",
+        "name": "Add Item",
+        "links": [
+            "f2ba29f467f31b8c",
+            "0a6ed28587f48423"
+        ],
+        "x": 135,
+        "y": 1500,
+        "wires": [
+            [
+                "9ccfd7f85007f1e2"
+            ]
+        ]
+    },
+    {
+        "id": "acad0055e0fd99db",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "dd2bcaacc7849c0e",
+        "name": "Edit Item",
+        "links": [
+            "349444bc1be48455",
+            "b784b40b69f7709c"
+        ],
+        "x": 135,
+        "y": 1720,
+        "wires": [
+            [
+                "3430431895f2335e"
+            ]
+        ]
+    },
+    {
+        "id": "6dd56e4d1fabcd1d",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "0711f2ffaad25b9a",
+        "name": "Delete Item",
+        "links": [
+            "60e22d941c198804"
+        ],
+        "x": 145,
+        "y": 1940,
+        "wires": [
+            [
+                "d13d9ae8aaf7799e"
+            ]
+        ]
+    },
+    {
+        "id": "fcad38fa2baabbef",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "aff99f9392aa1350",
+        "name": "Display Items",
+        "links": [
+            "501f728b26630566",
+            "5f4c5fa597a17dbb",
+            "6e91ef38de4af29c",
+            "e09a9d7718445b84",
+            "eb6c943110d417d5"
+        ],
+        "x": 125,
+        "y": 1120,
+        "wires": [
+            [
+                "c8405deeeaedbe94",
+                "87bc3ac7198c582a"
+            ]
+        ]
+    },
+    {
+        "id": "4471c9645330e260",
+        "type": "function",
+        "z": "368dca3c8504b329",
+        "g": "5e16978c52562be5",
+        "name": "Add Item (Flow Variant)",
+        "func": "// FUNCTION\n// A function to add an item to the items array\n//\n// INPUTS \n// flow.items: The persistant store of items\n// msg.payload - The item to be added \n//\n// OUTPUTS\n// flow.items: An updated persistant store of items\n// msg.payload : The updated array of items\n//\nvar items = flow.get(\"items\") || [];\nitems.unshift(msg.payload);\nflow.set(\"items\", items);\nmsg.payload = items;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 1520,
+        "wires": [
+            [
+                "1cab3a02330d48cd"
+            ]
+        ]
+    },
+    {
+        "id": "15e461c7838cbbf5",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "dd2bcaacc7849c0e",
+        "name": "Save Item?",
+        "property": "nav.command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "cancel",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "save",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 760,
+        "y": 1720,
+        "wires": [
+            [
+                "cb6a965ba11e6531"
+            ],
+            [
+                "34741c814e6fbdd5",
+                "33630cc8bc245ea9"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "34741c814e6fbdd5",
+        "type": "function",
+        "z": "368dca3c8504b329",
+        "g": "dd2bcaacc7849c0e",
+        "name": "Update Item (Flow Variant)",
+        "func": "// FUNCTION\n// A function to update the nth item in the items array\n//\n// INPUTS \n// flow.items: The persistant store of items\n// msg.index - The index of the item to be updated\n// msg.payload - The replacement item\n//\n// OUTPUTS\n// flow.items: An updated persistant store of items\n// msg.payload : The updated array of items\n//\nvar items = flow.get(\"items\") || [];\nvar n = Number(msg.index)\nitems[n] = msg.payload;\nflow.set(\"items\", items);\nmsg.payload = items;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 1740,
+        "wires": [
+            [
+                "cb6a965ba11e6531"
+            ]
+        ]
+    },
+    {
+        "id": "0479fba1264634ea",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "0da72b93a919c6b8",
+        "name": "Splash Screen Complete",
+        "mode": "link",
+        "links": [
+            "d7cd274fbd42b768"
+        ],
+        "x": 1285,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "09ed02241447d40b",
+        "type": "ui-template",
+        "z": "368dca3c8504b329",
+        "g": "593d5c7386216e2a",
+        "group": "3914e91cd622d268",
+        "page": "",
+        "ui": "",
+        "name": "Display Item Details",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<! --------------------------------------------------------------------------------------------------->\n<! -- DISPLAY ITEMS   -->\n<! --------------------------------------------------------------------------------------------------->\n\n<template>\n\n    \n<! -- HEADER -->\n    <div id=\"headingDiv\">\n        <table class=\"headerSection\">\n            <tr>\n                <td class=\"headerLeft\">\n                    <v-btn icon=\"mdi-close-thick\" variant=plain @click=\"msgSendOutput('cancel',`${key}` )\"></v-btn>\n                </td>\n                <td class=\"screenTitle\">\n                    <span style=\"color: white; font-size: 32px;\" class=\"screenTitle ml-0 pl-0\">Item Details</span>\n                </td>\n                <td class=\"headerRight\">\n                    <v-btn icon=\"mdi-note-edit-outline\" variant=plain @click=\"msgSendOutput('edit',`${key}` )\"></v-btn>\n                </td>\n            </tr>\n        </table>\n    </div>\n\n    <! -- ITEMS -->\n    <div class=\"d-flex justify-center ma-4\">\n        <v-card style=\"background-color: white; color: black;\" class=\"mx-auto my-2 pa-4 pb-8\" elevation=\"8\" rounded=\"lg\"  width=\"100%\">\n    \n            <! -- CARD TITLE -->\n            <v-card-title class=\"text-h5 font-weight-bold mb-3\">{{ items.name }}</v-card-title>\n            <v-card-subtitle></v-card-subtitle>\n\n            <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n    \n            <! -- CARD CONTENTS -->\n            <v-card-text>\n                <v-row align=\"left\" no-gutters>\n                    <v-col cols=\"3\">\n                        <span>Id</span>\n                    </v-col>\n                    <v-col cols=\"9\">\n                        <span class=\"font-weight-bold \">{{ key }}</span>\n                    </v-col>\n                </v-row>\n            </v-card-text>\n\n            <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n\n            <v-card-text>\n                <v-row align=\"left\" no-gutters>\n                    <v-col cols=\"3\">\n                        <span>Type</span>\n                    </v-col>\n                    <v-col cols=\"9\">\n                        <span class=\"font-weight-bold \">{{ items.type }}</span>\n                    </v-col>\n                </v-row>\n            </v-card-text>\n\n            <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n\n            <v-card-text>\n                <v-row align=\"left\" no-gutters>\n                    <v-col cols=\"3\">\n                        <span>Priority</span>\n                    </v-col>\n                    <v-col cols=\"9\">\n                        <span class=\"font-weight-bold \">{{ items.priority }}</span>\n                    </v-col>\n                </v-row>\n            </v-card-text>\n\n            <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n\n            <v-card-text>\n                <v-row align=\"left\" no-gutters>\n                    <v-col cols=\"3\">\n                        <span>Status</span>\n                    </v-col>\n                    <v-col cols=\"9\">\n                        <span class=\"font-weight-bold \">{{ items.status }}</span>\n                    </v-col>\n                </v-row>\n            </v-card-text>\n\n            <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n    \n            <! -- ACTIONS -->\n            <v-card-actions class=\"mt-8\">\n                <v-btn prepend-icon=\"mdi-delete\" variant=\"tonal\" block  @click=\"msgSendOutput('delete',`${key}` )\">Delete</v-btn>\n            </v-card-actions>\n\n        </v-card>\n    </div>\n</template>\n\n\n\n\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- SCRIPT SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n\n<script>\nexport default {\n\n    //---------------------------------------------------------------------------------------------\n    // COMPONENT VARIABLES - Define variables available component-wide (in <template> and component functions)\n    //---------------------------------------------------------------------------------------------\n    data() {\n        return {\n\n            // Items\n            items: {name: 'Sour Grapes'},\n\n            currentScreen: 'displayItemDetails',\n\n            key: '0',\n\n            lastMsg: null,\n                        \n            // mounted flag\n            mounted: false\n\n        }\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // WATCH ITEMS - watch for any changes of variables\n    //---------------------------------------------------------------------------------------------\n    watch: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // COMPUTED ITEMS - automatically compute this variable whenever VueJS deems appropriate\n    //---------------------------------------------------------------------------------------------\n    computed: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // METHODS - Expose methods to our <template> and Vue Application\n        //---------------------------------------------------------------------------------------------\n        methods: {\n    \n        // ---------------------------------------------------------------------------\n        // msgReceive - called each time a msg is received\n        // ---------------------------------------------------------------------------\n        msgReceive(msg) {\n            // alert('message received: ' + msg.payload);\n            // console.log(msg.payload);\n    \n            // Handle the inbound msg - update the items variable\n            // Only accepts an item object. No array input allowed.\n            this.items = msg.payload;\n            this.key = msg.index;\n        },\n\n        // ---------------------------------------------------------------------------\n        // msgSendOutput - A method to send an output msg\n        // Always send the current state of items in the msg.payload so they can be retrieved when the page is reloaded.\n        // Send the navigation message in msg.nav\n        // ---------------------------------------------------------------------------\n        msgSendOutput(command, index) {\n        const message = new Object();\n        const navDetails = new Object();\n        \n        navDetails.currentScreen = this.currentScreen;\n        navDetails.command = command;\n        message.payload = this.items;\n        message.nav = navDetails;\n        message.index = index;\n        this.send(message);\n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgSend - A method to send an output msg\n        // ---------------------------------------------------------------------------\n        msgSend(message) {\n        this.send(message);\n        },\n\n    \n        // ---------------------------------------------------------------------------\n        // onMounted - Called when the widget is mounted\n        // ---------------------------------------------------------------------------\n        onMounted() {\n        }\n    \n        },\n    \n        //---------------------------------------------------------------------------------------------\n        // MOUNTED - The code in this section runs when the component is first loaded\n        //---------------------------------------------------------------------------------------------\n        mounted() {\n            this.mounted = true\n    \n            // ---------------------------------------------------------------------------\n            // An inbound message (msg) watcher that runs ONLY when a messages is received\n            // ---------------------------------------------------------------------------\n            this.$socket.on('msg-input:' + this.id, (msg) => {\n                this.msgReceive(msg);\n            });\n    \n            // ---------------------------------------------------------------------------\n            // This message (msg) watcher only runs once when the component is loaded.\n            // Use it to retrive the state of items from the last msg sent from the component.\n            // ---------------------------------------------------------------------------\n            this.$socket.on('widget-load:' + this.id, (msg) => {\n                this.lastMsg = msg\n                this.items = msg.payload;\n                this.key = msg.index;\n            });\n    \n            this.onMounted();\n        },\n    \n        //---------------------------------------------------------------------------------------------\n        // UNMOUNTED - The code in this section runs when the user navigates away from the page\n        //---------------------------------------------------------------------------------------------\n        unmounted() {\n        }\n    \n}\n </script>\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- STYLE SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n<style>\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 620,
+        "y": 1300,
+        "wires": [
+            [
+                "11744eb1f5892bb4"
+            ]
+        ],
+        "icon": "node-red-contrib-alexa-remote2-applestrudel/alexa-remote-list.png"
+    },
+    {
+        "id": "f4c62e9c97700c74",
+        "type": "ui-text",
+        "z": "368dca3c8504b329",
+        "g": "0da72b93a919c6b8",
+        "group": "6ced0a490ad067f5",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Splash Screen Title",
+        "label": "To Do List",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": true,
+        "font": "Arial,Arial,Helvetica,sans-serif",
+        "fontSize": "44",
+        "color": "#ffffff",
+        "wrapText": false,
+        "className": "",
+        "x": 210,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "af4589a2734989bd",
+        "type": "delay",
+        "z": "368dca3c8504b329",
+        "g": "0da72b93a919c6b8",
+        "name": "wait 1 second",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 940,
+        "y": 940,
+        "wires": [
+            [
+                "0683b0711644daa0"
+            ]
+        ]
+    },
+    {
+        "id": "6b3e9783ff92b5ab",
+        "type": "ui-event",
+        "z": "368dca3c8504b329",
+        "g": "0da72b93a919c6b8",
+        "ui": "3373ac92ea949a80",
+        "name": "Monitor Events",
+        "x": 420,
+        "y": 940,
+        "wires": [
+            [
+                "3157781a828ff5d2",
+                "39946f2941854991"
+            ]
+        ]
+    },
+    {
+        "id": "3157781a828ff5d2",
+        "type": "debug",
+        "z": "368dca3c8504b329",
+        "g": "0da72b93a919c6b8",
+        "name": "EVENTS",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "39946f2941854991",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "0da72b93a919c6b8",
+        "name": "If Splash Screen Requested?",
+        "property": "payload.page.name",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "SplashScreen",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 680,
+        "y": 940,
+        "wires": [
+            [
+                "af4589a2734989bd"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e40874527901d6a7",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Navigate To Next Screen",
+        "property": "nav.nextScreen",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "splashScreen",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "displayItems",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "displayItemDetails",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "addItem",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "editItem",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "deleteItem",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 7,
+        "x": 650,
+        "y": 2480,
+        "wires": [
+            [
+                "9b507bd4cf867441",
+                "a191de5af0f6b8dd"
+            ],
+            [
+                "3a0dcccc8a4ed5cf",
+                "13b16d4833be11b6"
+            ],
+            [
+                "bdc73666eef75de8",
+                "92d29dc9484fd66c"
+            ],
+            [
+                "75cc0d68f4d11b2f",
+                "1d7ceab3f776b392"
+            ],
+            [
+                "0a69609b8805e158",
+                "8f749da4429a6ac1"
+            ],
+            [
+                "483a33eeb3dc3eeb",
+                "3b6719f3655bb583"
+            ],
+            [
+                "ea75e08cfce79270"
+            ]
+        ]
+    },
+    {
+        "id": "9e5d1983e23efa4f",
+        "type": "function",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Get Next Screen",
+        "func": "var navRules = flow.get(\"navRules\") || [];\nlet numberOfRules = navRules.length;\n\nvar currentScreen = msg.nav.currentScreen;\nvar navCommand = msg.nav.command;\n\nvar nextScreen = \"unknown\";\n\n\nfor (let i = 0; i < numberOfRules; i++) {\n    \n    // node.warn(navRules[i].currentScreen);\n    // node.warn(navRules[i].command);\n    \n    if (currentScreen == navRules[i].currentScreen && navCommand == navRules[i].command) {\n        nextScreen = navRules[i].nextScreen;\n    }\n}\n\nmsg.nav.nextScreen = nextScreen;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 2480,
+        "wires": [
+            [
+                "cda29bc591cbf3f1",
+                "e40874527901d6a7"
+            ]
+        ]
+    },
+    {
+        "id": "3112039f46017ce2",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Display Items IN",
+        "links": [
+            "212d90cae4132e91"
+        ],
+        "x": 155,
+        "y": 2360,
+        "wires": [
+            [
+                "9e5d1983e23efa4f",
+                "72b777207378526a"
+            ]
+        ]
+    },
+    {
+        "id": "6e91ef38de4af29c",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Display Items OUT",
+        "mode": "link",
+        "links": [
+            "fcad38fa2baabbef"
+        ],
+        "x": 1195,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "212d90cae4132e91",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "aff99f9392aa1350",
+        "name": "Display Items Complete",
+        "mode": "link",
+        "links": [
+            "3112039f46017ce2"
+        ],
+        "x": 1055,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "565753aa1e9b3987",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Add Item IN",
+        "links": [
+            "1cab3a02330d48cd"
+        ],
+        "x": 155,
+        "y": 2480,
+        "wires": [
+            [
+                "9e5d1983e23efa4f",
+                "72b777207378526a"
+            ]
+        ]
+    },
+    {
+        "id": "0a6ed28587f48423",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Add Item OUT",
+        "mode": "link",
+        "links": [
+            "4c2f2d465d34ab05"
+        ],
+        "x": 1195,
+        "y": 2500,
+        "wires": []
+    },
+    {
+        "id": "139f2aa61112bbb8",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Display Item Details OUT",
+        "mode": "link",
+        "links": [
+            "a7708b59e6548ad7",
+            "36ca62fecf4e54ae"
+        ],
+        "x": 1195,
+        "y": 2400,
+        "wires": []
+    },
+    {
+        "id": "b784b40b69f7709c",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Edit Item OUT",
+        "mode": "link",
+        "links": [
+            "acad0055e0fd99db"
+        ],
+        "x": 1195,
+        "y": 2600,
+        "wires": []
+    },
+    {
+        "id": "60e22d941c198804",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Delete Item OUT",
+        "mode": "link",
+        "links": [
+            "6dd56e4d1fabcd1d"
+        ],
+        "x": 1195,
+        "y": 2700,
+        "wires": []
+    },
+    {
+        "id": "0c88af563de40c0a",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Display Item Details IN",
+        "links": [
+            "dda2a2b4823e1ae7",
+            "7c3cf49410211351"
+        ],
+        "x": 155,
+        "y": 2420,
+        "wires": [
+            [
+                "9e5d1983e23efa4f",
+                "72b777207378526a"
+            ]
+        ]
+    },
+    {
+        "id": "6abb508768e80cf9",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Delete Item IN",
+        "links": [
+            "ab13a699103fa709"
+        ],
+        "x": 155,
+        "y": 2600,
+        "wires": [
+            [
+                "9e5d1983e23efa4f",
+                "72b777207378526a"
+            ]
+        ]
+    },
+    {
+        "id": "15c9a85165f3d373",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Edit Item IN",
+        "links": [
+            "cb6a965ba11e6531",
+            "4c66930663f69f89"
+        ],
+        "x": 155,
+        "y": 2540,
+        "wires": [
+            [
+                "9e5d1983e23efa4f",
+                "72b777207378526a"
+            ]
+        ]
+    },
+    {
+        "id": "1cab3a02330d48cd",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "5e16978c52562be5",
+        "name": "Add Item Complete",
+        "mode": "link",
+        "links": [
+            "565753aa1e9b3987"
+        ],
+        "x": 1345,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "dda2a2b4823e1ae7",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "593d5c7386216e2a",
+        "name": "Display Item Details Complete",
+        "mode": "link",
+        "links": [
+            "0c88af563de40c0a"
+        ],
+        "x": 1065,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "cb6a965ba11e6531",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "dd2bcaacc7849c0e",
+        "name": "Edit Items Complete",
+        "mode": "link",
+        "links": [
+            "15c9a85165f3d373"
+        ],
+        "x": 1345,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "ea75e08cfce79270",
+        "type": "debug",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Unknown Screen",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 990,
+        "y": 2800,
+        "wires": []
+    },
+    {
+        "id": "cda29bc591cbf3f1",
+        "type": "debug",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Next Screen",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "nav.nextScreen",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 610,
+        "y": 2580,
+        "wires": []
+    },
+    {
+        "id": "72b777207378526a",
+        "type": "debug",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Nav Input",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 2580,
+        "wires": []
+    },
+    {
+        "id": "9ccfd7f85007f1e2",
+        "type": "ui-template",
+        "z": "368dca3c8504b329",
+        "g": "5e16978c52562be5",
+        "group": "bee4da1270d007fe",
+        "page": "",
+        "ui": "",
+        "name": "Add Item V9",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<! --------------------------------------------------------------------------------------------------->\n<! -- DISPLAY ITEMS  <li>{{index1}} {{index2}} {{`${d.calendarEvents[`${index2}`].value}`}} </li> -->\n<! --------------------------------------------------------------------------------------------------->\n\n<template>\n    \n    <! -- HEADER -->\n    <div id=\"headingDiv\">\n        <table class=\"headerSection\">\n            <tr>\n                <td class=\"headerLeft\">\n                    <v-btn icon=\"mdi-close-thick\" variant=plain @click=\"msgSendOutput('cancel')\"></v-btn>\n                </td>\n                <td class=\"screenTitle\">\n                    <span style=\"color: white; font-size: 32px;\" class=\"screenTitle ml-0 pl-0\">New Item</span>\n                </td>\n                <td class=\"headerRight\">\n                    <v-btn icon=\"mdi-content-save\" variant=plain @click=\"validateAndSendMsg('save')\"></v-btn>\n                </td>\n            </tr>\n        </table>\n    </div>\n\n    <! -- DATA ENTRY FORM  TEXT CLASSES REMOVED = class=\"text-subtitle-1 text-medium-emphasis\" -->\n    <div class=\"d-flex justify-center ma-4\">\n        <v-card style=\"background-color: white; color: black;\" class=\"mx-auto my-2 pa-4 pb-8\" elevation=\"8\" width=\"100%\" rounded=\"lg\">\n\n            <div style=\"background-color: white; color: #333333;\" >Name</div>\n            <v-text-field id=\"newItemName\" density=\"compact\" placeholder=\"Name of item\" prepend-inner-icon=\"mdi-clipboard-outline\" variant=\"outlined\"></v-text-field>\n            \n            <div class=\"text-caption\">Type</div>\n            <v-radio-group id=\"newItemType\" v-model=\"defaultItemType\">\n                <v-radio label=\"Family\" value=\"Family\"></v-radio>\n                <v-radio label=\"Personal\" value=\"Personal\"></v-radio>\n                <v-radio label=\"Work\" value=\"Work\"></v-radio>\n            </v-radio-group>\n   \n            <div class=\"text-caption\">Priority</div>\n            <v-slider id=\"newItemPriority\" v-model=\"defaultItemPriority\" :max=\"3\" :min=\"1\" :step=\"1\" thumb-label></v-slider>\n\n            <v-alert class=\"mb-8\" icon=\"mdi-information\" title=\"Information\" text=\"All field are required.\"></v-alert>\n\n        </v-card>\n        \n    </div>\n</template>\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- SCRIPT SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n\n<script>\nexport default {\n\n    //---------------------------------------------------------------------------------------------\n    // COMPONENT VARIABLES - Define variables available component-wide (in <template> and component functions)\n    //---------------------------------------------------------------------------------------------\n    data() {\n        return {\n\n            // Items\n            items: [],\n\n            // Default values when adding an item\n            defaultItemType: 'Personal',\n            defaultItemPriority: 3,\n\n            currentScreen: 'addItem',\n\n            lastMsg: null,\n                        \n            // mounted semaphore\n            mounted: false\n\n        }\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // WATCH ITEMS - watch for any changes of variables\n    //---------------------------------------------------------------------------------------------\n    watch: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // COMPUTED ITEMS - automatically compute this variable whenever VueJS deems appropriate\n    //---------------------------------------------------------------------------------------------\n    computed: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // METHODS - Expose methods to our <template> and Vue Application\n    //---------------------------------------------------------------------------------------------\n    methods: {\n\n        // ---------------------------------------------------------------------------\n        // validateNewItem - Validates the New Item \n        // ---------------------------------------------------------------------------\n        validateNewItem() {\n\n            // Get the 3 fields from the form\n            let name = document.getElementById(\"newItemName\").value;\n            alert('Found newItemName !!! : ' + name);\n            let type = document.getElementById(\"newItemType\").value;\n            alert('Found newItemType !!! : ' + type);\n            let priority = document.getElementById(\"newItemPriority\").value;\n            alert('Found newItemPriority !!! : ' + priority);\n\n            // Validation login here which returns true or false\n            \n            return false;\n        },\n        \n        // ---------------------------------------------------------------------------\n        // validateAndSendMsg - Validates the New Item Form and if valid, send the output message.\n        // ---------------------------------------------------------------------------\n        validateAndSendMsg(command) {\n            // validateNewItem();   *** THIS ERRORS\n\n            // Get the 3 fields from the form\n            let name = document.getElementById(\"newItemName\").value;\n            // alert('Found name' + name);\n\n            let radioButtonChecked = -1;\n            let collection = document.getElementsByName(\"newItemType\");\n            for (let i = 0; i < collection.length; i++) {\n                if (collection[i].type == \"radio\") {\n                    if (collection[i].checked) {\n                        radioButtonChecked = i;\n                    }\n                }\n            }\n            // alert('type radio button checked = ' + radioButtonChecked);\n            let type = \"\";\n            if (radioButtonChecked == 0) {\n                type = \"Family\";\n            } else if (radioButtonChecked == 1) {\n                type = \"Personal\";\n            } else if (radioButtonChecked == 2) {\n                type = \"Work\"\n            } else {\n                type = \"\";\n            }        \n            // alert('type = ' + type);\n\n            let priority = document.getElementById(\"newItemPriority\").value;\n            // alert('Found priority ' + priority);\n\n            // Validate the name Fields\n            if (name == \"\") {\n                alert(\"Name must be filled out\");\n                return false;\n            }\n\n            // Validate the type Fields\n            if (type == \"\") {\n                alert(\"Type must be filled out\");\n                return false;\n            }\n\n            // Validate the priority Fields\n            if (priority == \"\" || isNaN(priority)) {\n                alert(\"Priority must be filled out\");\n                return false;\n            }\n            \n            // Passed validation\n\n            // Save the new Item in the items variable\n            const newItem = new Object();\n            newItem.name = name;\n            newItem.type = type;\n            newItem.priority = priority;\n            newItem.status = \"0\";\n            this.items = newItem;\n\n            // Send the output message\n            this.msgSendOutput(command);\n            return true;\n        },\n\n        // ---------------------------------------------------------------------------\n        // msgHandler - handles the update of the item variable\n        // ---------------------------------------------------------------------------\n        msgHandler(msg) {\n            if (msg.payload.length == 0) {\n                this.items = []                                     // Clear the items\n            } else {\n                // this.items = this.items.concat(msg.payload)      // Concatenate the msg to the items\n                this.items = msg.payload                           // Replace Items with the msg\n            }\n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgReceive - called each time a msg is received\n        // ---------------------------------------------------------------------------\n        msgReceive(msg) {\n            // alert('message received: ' + msg.payload);\n            // console.log(msg.payload);\n            // if (msg.payload.length == 0) { no payload found }\n        \n            // Handle the inbound msg - update the items variable\n            if (msg.payload.length == 0) {\n                this.items = []\n            } else {\n                this.items = msg.payload\n            }\n        \n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgSendOutput - A method to send an output msg\n        // Always send the current state of items in the msg.payload so they can be retrieved when the page is reloaded.\n        // Send the navigation message in msg.nav\n        // ---------------------------------------------------------------------------\n        msgSendOutput(command) {\n            const message = new Object();\n            const navDetails = new Object();\n\n            navDetails.currentScreen = this.currentScreen;\n            navDetails.command = command;\n\n            message.payload = this.items;\n            message.nav = navDetails;\n            this.send(message);\n        },\n\n        // ---------------------------------------------------------------------------\n        // msgSend - A method to send an output msg\n        // ---------------------------------------------------------------------------\n        msgSend(message) {\n        this.send(message);\n        },\n        \n        // ---------------------------------------------------------------------------\n        // onMounted - Called when the widget is mounted\n        // ---------------------------------------------------------------------------\n        onMounted() {\n        }\n\n    },\n  \n    //---------------------------------------------------------------------------------------------\n    // MOUNTED - The code in this section runs when the component is first loaded\n    //---------------------------------------------------------------------------------------------\n    mounted() {\n        this.mounted = true\n        \n        // ---------------------------------------------------------------------------\n        // An inbound message (msg) watcher that runs ONLY when a messages is received\n        // ---------------------------------------------------------------------------\n        this.$socket.on('msg-input:' + this.id, (msg) => {\n            this.msgReceive(msg);\n        });\n\n        // ---------------------------------------------------------------------------\n        // This message (msg) watcher only runs once when the component is loaded.\n        // Use it to retrive the state of items from the last msg sent from the component.\n        // ---------------------------------------------------------------------------\n        this.$socket.on('widget-load:' + this.id, (msg) => {\n            this.lastMsg = msg\n            this.items = msg.payload;\n        });\n\n        this.onMounted();\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // UNMOUNTED - The code in this section runs when the user navigates away from the page\n    //---------------------------------------------------------------------------------------------\n    unmounted() {\n    }\n}\n </script>\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- STYLE SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n<style>\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 270,
+        "y": 1500,
+        "wires": [
+            [
+                "a8f5c2f3eb3fb625"
+            ]
+        ],
+        "icon": "node-red-contrib-alexa-remote2-applestrudel/alexa-remote-list.png"
+    },
+    {
+        "id": "0c9e3b61c7c70cf4",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "aff99f9392aa1350",
+        "name": "Leave Screen?",
+        "property": "nav.command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 880,
+        "y": 1120,
+        "wires": [
+            [
+                "212d90cae4132e91"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "11744eb1f5892bb4",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "593d5c7386216e2a",
+        "name": "Leave Screen?",
+        "property": "nav.command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 870,
+        "y": 1300,
+        "wires": [
+            [
+                "dda2a2b4823e1ae7"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "9b507bd4cf867441",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Clear Nav Details",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "nav",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 990,
+        "y": 2200,
+        "wires": [
+            [
+                "eb6c943110d417d5"
+            ]
+        ]
+    },
+    {
+        "id": "a8f5c2f3eb3fb625",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "5e16978c52562be5",
+        "name": "Leave Screen?",
+        "property": "nav.command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 540,
+        "y": 1500,
+        "wires": [
+            [
+                "1dac222538497690"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "3c5695da4cc4286d",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "dd2bcaacc7849c0e",
+        "name": "Leave Screen?",
+        "property": "nav.command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 540,
+        "y": 1720,
+        "wires": [
+            [
+                "15e461c7838cbbf5"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d7cd274fbd42b768",
+        "type": "link in",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Splash Screen IN",
+        "links": [
+            "0479fba1264634ea",
+            "ee90b5a8c2a69d59"
+        ],
+        "x": 155,
+        "y": 2300,
+        "wires": [
+            [
+                "9e5d1983e23efa4f",
+                "72b777207378526a"
+            ]
+        ]
+    },
+    {
+        "id": "eb6c943110d417d5",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Splah Screen OUT",
+        "mode": "link",
+        "links": [
+            "fcad38fa2baabbef"
+        ],
+        "x": 1195,
+        "y": 2200,
+        "wires": []
+    },
+    {
+        "id": "0683b0711644daa0",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "0da72b93a919c6b8",
+        "name": "Set Nav Details",
+        "rules": [
+            {
+                "t": "set",
+                "p": "nav.currentScreen",
+                "pt": "msg",
+                "to": "splashScreen",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "nav.command",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1140,
+        "y": 940,
+        "wires": [
+            [
+                "0479fba1264634ea"
+            ]
+        ]
+    },
+    {
+        "id": "3430431895f2335e",
+        "type": "ui-template",
+        "z": "368dca3c8504b329",
+        "g": "dd2bcaacc7849c0e",
+        "group": "65aad6fbc197e141",
+        "page": "",
+        "ui": "",
+        "name": "Edit Item V2",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<! --------------------------------------------------------------------------------------------------->\n<! -- DISPLAY ITEMS  <li>{{index1}} {{index2}} {{`${d.calendarEvents[`${index2}`].value}`}} </li> -->\n<! --------------------------------------------------------------------------------------------------->\n\n<template>\n    \n    <! -- HEADER -->\n    <div id=\"headingDiv\">\n        <table class=\"headerSection\">\n            <tr>\n                <td class=\"headerLeft\">\n                    <v-btn icon=\"mdi-close-thick\" variant=plain @click=\"msgSendOutput('cancel',`${key}`)\"></v-btn>\n                </td>\n                <td class=\"screenTitle\">\n                    <span style=\"color: white; font-size: 32px;\" class=\"screenTitle ml-0 pl-0\">Edit Item</span>\n                </td>\n                <td class=\"headerRight\">\n                    <v-btn icon=\"mdi-content-save\" variant=plain @click=\"validateAndSendMsg('save',`${key}`)\"></v-btn>\n                </td>\n            </tr>\n        </table>\n    </div>\n\n    <! -- DATA ENTRY FORM  TEXT CLASSES REMOVED = class=\"text-subtitle-1 text-medium-emphasis\" -->\n    <div class=\"d-flex justify-center ma-4\">\n        <v-card style=\"background-color: white; color: black;\" class=\"mx-auto pa-12 pb-8\" elevation=\"8\" width=\"100%\" rounded=\"lg\">\n\n            <div style=\"background-color: white; color: #333333;\" >Name</div>            \n            <v-text-field id=\"newItemName\" v-model=\"item_name\" density=\"compact\" placeholder=\"Name of item\"  variant=\"outlined\"></v-text-field>\n\n            <div class=\"text-caption\">Type</div>\n            <v-radio-group  id=\"newItemType\" v-model=\"item_type\">\n                <v-radio label=\"Family\" value=\"Family\"></v-radio>\n                <v-radio label=\"Personal\" value=\"Personal\"></v-radio>\n                <v-radio label=\"Work\" value=\"Work\"></v-radio>\n            </v-radio-group>\n   \n            <div class=\"text-caption\">Priority</div>\n            <v-slider id=\"newItemPriority\" v-model=\"item_priority\" :max=\"3\" :min=\"1\" :step=\"1\" thumb-label></v-slider>\n\n            <v-switch  id=\"newItemStatus\" v-model=\"item_status\" label=\"Done?\" false-value=\"0\" true-value=\"1\" hide-details></v-switch>\n\n        </v-card>\n        \n    </div>\n</template>\n\n\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- SCRIPT SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n\n<script>\nexport default {\n\n    //---------------------------------------------------------------------------------------------\n    // COMPONENT VARIABLES - Define variables available component-wide (in <template> and component functions)\n    //---------------------------------------------------------------------------------------------\n    data() {\n        return {\n\n            // Items\n            items: { name: 'Melon', type: 'Work', priority: '1'},\n\n            currentScreen: 'editItem',\n\n            key: '0',\n\n            item_name: 'Dog',\n            item_type: 'Personal',\n            item_priority: 1,\n            item_status: \"0\",\n\n            lastMsg: null,\n                        \n            // mounted semaphore\n            mounted: false\n\n        }\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // WATCH ITEMS - watch for any changes of variables\n    //---------------------------------------------------------------------------------------------\n    watch: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // COMPUTED ITEMS - automatically compute this variable whenever VueJS deems appropriate\n    //---------------------------------------------------------------------------------------------\n    computed: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // METHODS - Expose methods to our <template> and Vue Application\n    //---------------------------------------------------------------------------------------------\n    methods: {\n\n        // ---------------------------------------------------------------------------\n        // validateNewItem - Validates the New Item \n        // ---------------------------------------------------------------------------\n        validateNewItem() {\n\n            // Get the 3 fields from the form\n            let name = document.getElementById(\"newItemName\").value;\n            alert('Found newItemName !!! : ' + name);\n            let type = document.getElementById(\"newItemType\").value;\n            alert('Found newItemType !!! : ' + type);\n            let priority = document.getElementById(\"newItemPriority\").value;\n            alert('Found newItemPriority !!! : ' + priority);\n\n            // Validation login here which returns true or false\n            \n            return false;\n        },\n        \n        // ---------------------------------------------------------------------------\n        // validateAndSendMsg - Validates the New Item Form and if valid, send the output message.\n        // ---------------------------------------------------------------------------\n        validateAndSendMsg(command, index) {\n\n            // Get the 3 fields from the form\n            let name = document.getElementById(\"newItemName\").value;\n            // alert('Found name' + name);\n\n            let radioButtonChecked = -1;\n            let collection = document.getElementsByName(\"newItemType\");\n            for (let i = 0; i < collection.length; i++) {\n                if (collection[i].type == \"radio\") {\n                    if (collection[i].checked) {\n                        radioButtonChecked = i;\n                    }\n                }\n            }\n            // alert('type radio button checked = ' + radioButtonChecked);\n            let type = \"\";\n            if (radioButtonChecked == 0) {\n                type = \"Family\";\n            } else if (radioButtonChecked == 1) {\n                type = \"Personal\";\n            } else if (radioButtonChecked == 2) {\n                type = \"Work\"\n            } else {\n                type = \"\";\n            }        \n            // alert('type = ' + type);\n\n            let priority = document.getElementById(\"newItemPriority\").value;\n            // alert('Found priority ' + priority);\n\n\n            //\n            // *** CHANGE NAME, TYPE & PRIORITY OVER TO GET THEIR VALUE FROM data variable like status\n            //\n            let status = this.item_status\n            // alert('Found status ' + status);\n\n\n            // Validate the name Fields\n            if (name == \"\") {\n                alert(\"Name must be filled out\");\n                return false;\n            }\n\n            // Validate the type Fields\n            if (type == \"\") {\n                alert(\"Type must be filled out\");\n                return false;\n            }\n\n            // Validate the priority Fields\n            if (priority == \"\" || isNaN(priority)) {\n                alert(\"Priority must be filled out\");\n                return false;\n            }\n\n            // Validate the status Fields\n            if (status == \"0\" && status == \"1\") {\n                alert(\"Status must be filled 0 or 1\");\n                return false;\n            }\n\n            \n            // Passed validation\n\n            // Save the new Item in the items variable\n            const newItem = new Object();\n            newItem.name = name;\n            newItem.type = type;\n            newItem.priority = priority;\n            newItem.status = status;\n            this.items = newItem;\n\n            // Send the output message\n            this.msgSendOutput(command, index);\n            return true;\n        },\n\n        // ---------------------------------------------------------------------------\n        // msgHandler - handles the update of the item variable\n        // ---------------------------------------------------------------------------\n        msgHandler(msg) {\n            if (msg.payload.length == 0) {\n                this.items = []                                     // Clear the items\n            } else {\n                // this.items = this.items.concat(msg.payload)      // Concatenate the msg to the items\n                this.items = msg.payload                           // Replace Items with the msg\n            }\n        },\n\n        // ---------------------------------------------------------------------------\n        // preset - \n        // ---------------------------------------------------------------------------\n        preset() {\n            alert('Presetting : ' + this.items.name);\n            // document.getElementById(\"newItemName\").value = this.items.name;\n            // document.getElementById(\"newItemName\").setAttribute('value','MYVALUE');\n\n            let collection = document.getElementsByName(\"newItemType\");\n            collection[1].checked = true;\n\n            alert('DONE');\n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgReceive - called each time a msg is received\n        // ---------------------------------------------------------------------------\n        msgReceive(msg) {\n            // alert('message received: ' + msg.payload);\n            // console.log(msg.payload);\n            // if (msg.payload.length == 0) { no payload found }\n        \n            // Handle the inbound msg - update the items variable\n            if (msg.payload.length == 0) {\n                this.items = []\n            } else {\n                this.items = msg.payload\n                this.item_name = this.items.name;\n                this.item_type = this.items.type;\n                this.item_priority = this.items.priority;\n                this.item_status = this.items.status;\n                this.key = msg.index;\n            }\n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgSendOutput - A method to send an output msg\n        // Always send the current state of items in the msg.payload so they can be retrieved when the page is reloaded.\n        // Send the navigation message in msg.nav\n        // ---------------------------------------------------------------------------\n        msgSendOutput(command, index) {\n            const message = new Object();\n            const navDetails = new Object();\n\n            navDetails.currentScreen = this.currentScreen;\n            navDetails.command = command;\n\n            message.payload = this.items;\n            message.nav = navDetails;\n            message.index = index;\n            this.send(message);\n        },\n\n        // ---------------------------------------------------------------------------\n        // msgSend - A method to send an output msg\n        // ---------------------------------------------------------------------------\n        msgSend(message) {\n        this.send(message);\n        },\n        \n        // ---------------------------------------------------------------------------\n        // onMounted - Called when the widget is mounted\n        // ---------------------------------------------------------------------------\n        onMounted() {\n        }\n\n    },\n  \n    //---------------------------------------------------------------------------------------------\n    // MOUNTED - The code in this section runs when the component is first loaded\n    //---------------------------------------------------------------------------------------------\n    mounted() {\n        this.mounted = true\n        \n        // ---------------------------------------------------------------------------\n        // An inbound message (msg) watcher that runs ONLY when a messages is received\n        // ---------------------------------------------------------------------------\n        this.$socket.on('msg-input:' + this.id, (msg) => {\n            this.msgReceive(msg);\n        });\n\n        // ---------------------------------------------------------------------------\n        // This message (msg) watcher only runs once when the component is loaded.\n        // Use it to retrive the state of items from the last msg sent from the component.\n        // ---------------------------------------------------------------------------\n        this.$socket.on('widget-load:' + this.id, (msg) => {\n            this.lastMsg = msg\n            this.items = msg.payload;\n        });\n\n        this.onMounted();\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // UNMOUNTED - The code in this section runs when the user navigates away from the page\n    //---------------------------------------------------------------------------------------------\n    unmounted() {\n    }\n}\n </script>\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- STYLE SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n<style>\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 270,
+        "y": 1720,
+        "wires": [
+            [
+                "3c5695da4cc4286d",
+                "0a7fc821604c3ec1"
+            ]
+        ],
+        "icon": "node-red-contrib-alexa-remote2-applestrudel/alexa-remote-list.png"
+    },
+    {
+        "id": "3a0dcccc8a4ed5cf",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Clear Nav Details",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "nav",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 990,
+        "y": 2300,
+        "wires": [
+            [
+                "6e91ef38de4af29c"
+            ]
+        ]
+    },
+    {
+        "id": "bdc73666eef75de8",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Clear Nav Details",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "nav",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 990,
+        "y": 2400,
+        "wires": [
+            [
+                "139f2aa61112bbb8"
+            ]
+        ]
+    },
+    {
+        "id": "75cc0d68f4d11b2f",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Clear Nav Details",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "nav",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 990,
+        "y": 2500,
+        "wires": [
+            [
+                "0a6ed28587f48423"
+            ]
+        ]
+    },
+    {
+        "id": "0a69609b8805e158",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Clear Nav Details",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "nav",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 990,
+        "y": 2600,
+        "wires": [
+            [
+                "b784b40b69f7709c"
+            ]
+        ]
+    },
+    {
+        "id": "483a33eeb3dc3eeb",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Clear Nav Details",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "nav",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 990,
+        "y": 2700,
+        "wires": [
+            [
+                "60e22d941c198804"
+            ]
+        ]
+    },
+    {
+        "id": "d538763f849eabf4",
+        "type": "ui-control",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Show The Items Screen",
+        "ui": "3373ac92ea949a80",
+        "events": "all",
+        "x": 1290,
+        "y": 2340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "13b16d4833be11b6",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Display Items Screen",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Display Items",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 2340,
+        "wires": [
+            [
+                "d538763f849eabf4"
+            ]
+        ]
+    },
+    {
+        "id": "3cd0663451ad52d7",
+        "type": "ui-control",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Show The Display Item Details Page",
+        "ui": "3373ac92ea949a80",
+        "events": "all",
+        "x": 1330,
+        "y": 2440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "92d29dc9484fd66c",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Display Item Details Screen",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Display Item",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1020,
+        "y": 2440,
+        "wires": [
+            [
+                "3cd0663451ad52d7"
+            ]
+        ]
+    },
+    {
+        "id": "0b5f4c76383339a8",
+        "type": "ui-control",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Show The Add Item",
+        "ui": "3373ac92ea949a80",
+        "events": "all",
+        "x": 1280,
+        "y": 2540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1d7ceab3f776b392",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Add Item Screen",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Add Item",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 990,
+        "y": 2540,
+        "wires": [
+            [
+                "0b5f4c76383339a8"
+            ]
+        ]
+    },
+    {
+        "id": "2ee54f623e211bf4",
+        "type": "ui-control",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Show The Edit Item Page",
+        "ui": "3373ac92ea949a80",
+        "events": "all",
+        "x": 1290,
+        "y": 2640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8f749da4429a6ac1",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Edit Item Screen",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Edit Item",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 980,
+        "y": 2640,
+        "wires": [
+            [
+                "2ee54f623e211bf4"
+            ]
+        ]
+    },
+    {
+        "id": "14f354c957ee416d",
+        "type": "ui-control",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Show The Delete Item Page",
+        "ui": "3373ac92ea949a80",
+        "events": "all",
+        "x": 1300,
+        "y": 2740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3b6719f3655bb583",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Delete Item Screen",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Delete Item",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 990,
+        "y": 2740,
+        "wires": [
+            [
+                "14f354c957ee416d"
+            ]
+        ]
+    },
+    {
+        "id": "c1c6e215aa999377",
+        "type": "ui-control",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Show The Splash Screen",
+        "ui": "3373ac92ea949a80",
+        "events": "all",
+        "x": 1290,
+        "y": 2240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a191de5af0f6b8dd",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "f966a0567ce5eefb",
+        "name": "Splash Screen",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "SplashScreen",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 980,
+        "y": 2240,
+        "wires": [
+            [
+                "c1c6e215aa999377"
+            ]
+        ]
+    },
+    {
+        "id": "3c7e05ead13aab1c",
+        "type": "ui-template",
+        "z": "368dca3c8504b329",
+        "g": "4d58bad55cb14d1e",
+        "group": "",
+        "page": "",
+        "ui": "3373ac92ea949a80",
+        "name": "iphone.css",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "body {\n    font-family: -apple-system, BlinkMacSystemFont, sans-serif;\n    /* Use standard apple system fonts */\n    overflow: hidden;\n    background: #d7d7d7;\n    /* Colour the background (outside the screen) light grey */\n    margin: 0;\n    padding: 0;\n    -webkit-user-select: none;\n    /* Disable text selection completely */\n    -webkit-tap-highlight-color: transparent;\n    /* Disable highlighting */\n    -webkit-touch-callout: none;\n    /* Disable callouts */\n}\n\na:link {\n    /* Style unvisited Links */\n    color: black;\n    background-colour: transparent;\n    text-decoration: none;\n    /* No underline */\n}\n\na:visited {\n    /* Style visited Links */\n    color: black;\n    background-colour: transparent;\n    text-decoration: none;\n    /* No underline */\n}\n\n\na:active {\n    /* Style active Links */\n    color: black;\n    background-colour: transparent;\n    text-decoration: none;\n    /* No underline */\n}\n\n\na:hover {\n    /* Underline  link when mousing over link*/\n    color: black;\n    background-colour: transparent;\n    text-decoration: underline;\n}\n\nh2 {\n    font-weight: bold;\n    font-size: 24px;\n    margin: 0px 0px 5px 0px;\n    /* margin: top, right, bottom, left  */\n    text-align: left;\n\n}\n\n#titleDiv {\n    margin: 0px 0px 0px 15px;\n    /* margin: top, right, bottom, left  */\n}\n\n#titleBoldDiv {\n    font-weight: bold;\n}\n\nh3 {\n    font-size: 20px;\n    font-weight: bold;\n    margin: 10px 0px 10px 0px;\n    /* margin: top, right, bottom, left  */\n}\n\n\ninput:focus,\nbutton:focus {\n    /* Turn off border highlightng on input and button tags when in focus. */\n    outline: none;\n}\n\ninput[type=\"text\"] {\n    /* give input text (&search) fields an iPhone look & feel */\n    width: 100%;\n    font-size: 20px;\n    background: #FFFFFF;\n    border: none;\n    border-radius: 0px;\n    padding: 10px 20px;\n}\n\ninput[type=\"number\"] {\n    /* give input number fields an iPhone look & feel */\n    width: 100%;\n    font-size: 20px;\n    background: #FFFFFF;\n    border: none;\n    border-radius: 0px;\n    padding: 10px 20px;\n}\n\n.flat-btn {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    border-radius: 0;\n}\n\n#iButton {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    border-radius: 0;\n}\n\n#button1 {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    border-radius: 0;\n}\n\n#submitButton1 {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    border-radius: 0;\n}\n\n#screen {\n    /* Screen <div> Style */\n    width: 375px;\n    /* width of the screen */\n    height: 645px;\n    /* height of the screen */\n    background: #EFEFF4;\n    /* Colour the screen background samsung smarthinhgs bg grey*/\n}\n\n.headerSection {\n    width: 100%;\n    /*border: 1px solid black ;\t   Good for debugging */\n}\n\n.headerLeft {\n    width: 40px;\n    border: 0;\n    font-size: 16px;\n    text-align: left;\n    /* Align lefthand link - left*/\n    /* border: 1px solid black ;\t  Good for debugging */\n}\n\n.screenTitle {\n    font-weight: bold;\n    text-align: center;\n    /* centre screen title */\n}\n\n.headerRight {\n    width: 40px;\n    border: 0;\n    font-size: 16px;\n    text-align: right;\n    /* Align righthand link - right*/\n}\n\n.attributeHeaderLeft {\n    width: 40px;\n    border: 0;\n    font-size: 17px;\n    text-align: left;\n    /* Align lefthand link - left*/\n    /* border: 1px solid black ;\t   Good for debugging */\n}\n\n.attributeHeaderRight {\n    width: 40px;\n    border: 0;\n    font-size: 17px;\n    text-align: right;\n    /* Align righthand link - right*/\n}\n\n\n\n.attributesTitleSection {\n    width: 100%;\n}\n\n.commandsTitleSection {\n    width: 100%;\n}\n\n\n.AttributeType {\n    /*  font-weight: bold ; */\n}\n\n.attributeTitleLeft {\n    width: 40px;\n    border: 0;\n    font-size: 34px;\n    text-align: left;\n    /* Align lefthand link - left*/\n}\n\n.attributeTitleRight {\n    width: 40px;\n    border: 0;\n    font-size: 34px;\n    text-align: right;\n    /* Align righthand link - right*/\n}\n\n\n.commandTitleLeft {\n    width: 40px;\n    border: 0;\n    font-size: 34px;\n    text-align: left;\n    /* Align lefthand link - left*/\n    /*border: 1px solid black ;\t   Good for debugging */\n}\n\n.commandTitleRight {\n    width: 40px;\n    border: 0;\n    font-size: 34px;\n    text-align: right;\n    /* Align righthand link - right*/\n}\n\n\n.inline {\n    /* http POST link */\n    display: inline;\n    text-align: right;\n}\n\n.link-button LooksLikeaLink {\n    background: none;\n    border: none;\n    color: blue;\n    text-decoration: decoration;\n    cursor: pointer;\n    font-size: 1em;\n    font-family: serif;\n}\n\n.link-button {\n    /* http POST button */\n    background: none;\n    border: none;\n    color: black;\n    text-decoration: none;\n    cursor: pointer;\n    font-size: 34px;\n}\n\n.link-button:focus {\n    /* http POST button */\n    outline: none;\n}\n\n.link-button:active {\n    /* http POST button */\n    color: black;\n}\n\n.capabilitiesSection {\n    background: #EFEFF4;\n    /* Colour of the capabilities section. Could delete this and inherit the screen bg colour */\n    margin-left: 15px;\n    /* left and right margin of 15px, centres the items on the screen */\n    margin-right: 15px;\n    padding: 0;\n}\n\n\n\n.attributeSection {\n    background: #EFEFF4;\n    /* Colour of the attribute section. Could delete this and inherit the screen bg colour */\n    margin: 10px 15px 0px 15px;\n    /* margin: top, right, bottom, left  */\n    padding: 0;\n}\n\n.commandSection {\n    background: #EFEFF4;\n    /* Colour of the attribute section. Could delete this and inherit the screen bg colour */\n    margin: 10px 15px 0px 15px;\n    /* margin: top, right, bottom, left  */\n    padding: 0;\n}\n\n\n\n\n.outerTable {}\n\n.itemTable {\n    width: 345px;\n    /* width of the item box. 30px smaller than the screen width. */\n    border=\"0\";\n    /* no border on the item boxes */\n    border-radius: 15px;\n    /* extent of the rounded item boxes */\n    background: #FFFFFF;\n    /* fill the item boxes with white so they show against the grey bg */\n    padding: 5px;\n    /* gives the elements in the itemTable room to breath */\n    cellpadding=\"0\";\n    cellspacing=\"0\";\n\n    margin: 0px 0px 0px 15px;\n    /* margin: top, right, bottom, left  */\n}\n\n.col1 {\n    width: 40px;\n    /* set the capability icon column width */\n    border: 0;\n}\n\n\n.itemName {\n    border: 0;\n    font-weight: bold;\n}\n\n.itemPresentation {\n    border: 0;\n    font-weight: bold;\n}\n\n.CapabilityId {\n    /* Nb. The remaining width are used for the capability name  */\n    border: 0;\n    font-weight: bold;\n}\n\n.CapabilityVersion {\n    border: 0;\n}\n\n.CapabilityStatus {\n    border: 0;\n}\n\n.attributeId {\n    /* Nb. The remaining width are used for the attribute name  */\n    border: 0;\n    font-weight: bold;\n}\n\n.commandId {\n    /* Nb. The remaining width are used for the command name  */\n    border: 0;\n    font-weight: bold;\n}\n\n\n\n.col3 {\n    width: 25px;\n    /* set the delete icon column width */\n    border: 0;\n}\n\n\n\n.gap {\n    /* not current in use. used a <p> tag instead */\n    height: 150px;\n}\n\n\n.button {\n    /* Button Style */\n    font-family: Helvetica;\n    font-weight: bold;\n    padding: 15px;\n    border: 1px solid black;\n    -moz-border-radius: 8px;\n    -webkit-border-radius: 8px;\n    margin-top: 10px;\n    margin-bottom: 10px;\n    background-color: white;\n}\n\n\ndatalist {\n    position: absolute;\n    background-color: lightgrey;\n    font-family: sans-serif;\n    font-size: 0.8rem;\n}\n\noption {\n    background-color: #bbb;\n    padding: 4px;\n    margin-bottom: 1px;\n    cursor: pointer;\n}\n\ninput[type=\"submit\"] {\n    font-size: 20px;\n    background: pink;\n    border: none;\n    padding: 10px 20px;\n}\n\n.flat-btn {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    border-radius: 0;\n}",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "site:style",
+        "className": "",
+        "x": 190,
+        "y": 540,
+        "wires": [
+            []
+        ],
+        "icon": "font-awesome/fa-align-justify"
+    },
+    {
+        "id": "d13d9ae8aaf7799e",
+        "type": "ui-template",
+        "z": "368dca3c8504b329",
+        "g": "0711f2ffaad25b9a",
+        "group": "6360235bc0e8c794",
+        "page": "",
+        "ui": "",
+        "name": "Delete Item V1",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<! --------------------------------------------------------------------------------------------------->\n<! -- DISPLAY ITEMS  <li>{{index1}} {{index2}} {{`${d.calendarEvents[`${index2}`].value}`}} </li> -->\n<! --------------------------------------------------------------------------------------------------->\n\n<template>\n    \n    <! -- HEADER -->\n    <div id=\"headingDiv\">\n        <table class=\"headerSection\">\n            <tr>\n                <td class=\"headerLeft\">\n                    <v-btn icon=\"mdi-close-thick\" variant=plain @click=\"msgSendOutput('cancel',`${key}`)\"></v-btn>\n                </td>\n                <td class=\"screenTitle\">\n                    <span style=\"color: white; font-size: 32px;\" class=\"screenTitle ml-0 pl-0\">Delete Item</span>\n                </td>\n                <td class=\"headerRight\">\n                    <v-btn icon=\"mdi-delete\" variant=plain @click=\"msgSendOutput('delete',`${key}`)\"></v-btn>\n                </td>\n            </tr>\n        </table>\n    </div>\n\n\n\n    <! -- ITEM -->\n        <div class=\"d-flex justify-center ma-4\">\n            <v-card style=\"background-color: white; color: black;\" class=\"mx-auto my-2 pa-4 pb-8\" elevation=\"8\" rounded=\"lg\" width=\"100%\">\n\n                            <v-alert class=\"mb-8\" icon=\"mdi-alert\" title=\"Warning\" text=\"Are you sure you want to delete this item? Press Cancel to abandon deletion.\"></v-alert>\n        \n                <! -- CARD TITLE -->\n                    <v-card-title class=\"text-h5 font-weight-bold mb-3\">{{ items.name }}</v-card-title>\n                    <v-card-subtitle></v-card-subtitle>\n        \n                    <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n        \n                    <! -- CARD CONTENTS -->\n                        <v-card-text>\n                            <v-row align=\"left\" no-gutters>\n                                <v-col cols=\"3\">\n                                    <span>Id</span>\n                                </v-col>\n                                <v-col cols=\"9\">\n                                    <span class=\"font-weight-bold \">{{ key }}</span>\n                                </v-col>\n                            </v-row>\n                        </v-card-text>\n        \n                        <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n        \n                        <v-card-text>\n                            <v-row align=\"left\" no-gutters>\n                                <v-col cols=\"3\">\n                                    <span>Type</span>\n                                </v-col>\n                                <v-col cols=\"9\">\n                                    <span class=\"font-weight-bold \">{{ items.type }}</span>\n                                </v-col>\n                            </v-row>\n                        </v-card-text>\n        \n                        <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n        \n                        <v-card-text>\n                            <v-row align=\"left\" no-gutters>\n                                <v-col cols=\"3\">\n                                    <span>Priority</span>\n                                </v-col>\n                                <v-col cols=\"9\">\n                                    <span class=\"font-weight-bold \">{{ items.priority }}</span>\n                                </v-col>\n                            </v-row>\n                        </v-card-text>\n        \n                        <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n        \n                        <v-card-text>\n                            <v-row align=\"left\" no-gutters>\n                                <v-col cols=\"3\">\n                                    <span>Status</span>\n                                </v-col>\n                                <v-col cols=\"9\">\n                                    <span class=\"font-weight-bold \">{{ items.status }}</span>\n                                </v-col>\n                            </v-row>\n                        </v-card-text>\n        \n                        <hr style=\" border: 1px solid #eeeeee; border-radius: 1em; \">\n        \n                        <! -- ACTIONS -->\n                            <v-card-actions class=\"mt-8\">\n                                <v-btn prepend-icon=\"mdi-delete\" variant=\"tonal\" block\n                                    @click=\"msgSendOutput('delete',`${key}`)\">Delete</v-btn>\n                            </v-card-actions>\n        \n            </v-card>\n        </div>\n\n</template>\n\n\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- SCRIPT SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n\n<script>\nexport default {\n\n    //---------------------------------------------------------------------------------------------\n    // COMPONENT VARIABLES - Define variables available component-wide (in <template> and component functions)\n    //---------------------------------------------------------------------------------------------\n    data() {\n        return {\n\n            // Items\n            items: { name: 'Melon', type: 'Work', priority: '1'},\n\n            currentScreen: 'deleteItem',\n\n            key: '0',\n\n            lastMsg: null,\n                        \n            // mounted semaphore\n            mounted: false\n\n        }\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // WATCH ITEMS - watch for any changes of variables\n    //---------------------------------------------------------------------------------------------\n    watch: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // COMPUTED ITEMS - automatically compute this variable whenever VueJS deems appropriate\n    //---------------------------------------------------------------------------------------------\n    computed: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // METHODS - Expose methods to our <template> and Vue Application\n    //---------------------------------------------------------------------------------------------\n    methods: {\n\n        // ---------------------------------------------------------------------------\n        // msgReceive - called each time a msg is received\n        // ---------------------------------------------------------------------------\n        msgReceive(msg) {\n            // alert('message received: ' + msg.payload);\n            // console.log(msg.payload);\n            // if (msg.payload.length == 0) { no payload found }\n        \n            // Handle the inbound msg - update the items variable\n            if (msg.payload.length == 0) {\n                this.items = []\n            } else {\n                this.items = msg.payload\n                this.key = msg.index;\n            }\n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgSendOutput - A method to send an output msg\n        // Always send the current state of items in the msg.payload so they can be retrieved when the page is reloaded.\n        // Send the navigation message in msg.nav\n        // ---------------------------------------------------------------------------\n        msgSendOutput(command, index) {\n            const message = new Object();\n            const navDetails = new Object();\n\n            navDetails.currentScreen = this.currentScreen;\n            navDetails.command = command;\n\n            message.payload = this.items;\n            message.nav = navDetails;\n            message.index = index;\n            this.send(message);\n        },\n\n        // ---------------------------------------------------------------------------\n        // msgSend - A method to send an output msg\n        // ---------------------------------------------------------------------------\n        msgSend(message) {\n        this.send(message);\n        },\n        \n        // ---------------------------------------------------------------------------\n        // onMounted - Called when the widget is mounted\n        // ---------------------------------------------------------------------------\n        onMounted() {\n        }\n\n    },\n  \n    //---------------------------------------------------------------------------------------------\n    // MOUNTED - The code in this section runs when the component is first loaded\n    //---------------------------------------------------------------------------------------------\n    mounted() {\n        this.mounted = true\n        \n        // ---------------------------------------------------------------------------\n        // An inbound message (msg) watcher that runs ONLY when a messages is received\n        // ---------------------------------------------------------------------------\n        this.$socket.on('msg-input:' + this.id, (msg) => {\n            this.msgReceive(msg);\n        });\n\n        // ---------------------------------------------------------------------------\n        // This message (msg) watcher only runs once when the component is loaded.\n        // Use it to retrive the state of items from the last msg sent from the component.\n        // ---------------------------------------------------------------------------\n        this.$socket.on('widget-load:' + this.id, (msg) => {\n            this.lastMsg = msg\n            this.items = msg.payload;\n        });\n\n        this.onMounted();\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // UNMOUNTED - The code in this section runs when the user navigates away from the page\n    //---------------------------------------------------------------------------------------------\n    unmounted() {\n    }\n}\n </script>\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- STYLE SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n<style>\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 280,
+        "y": 1940,
+        "wires": [
+            [
+                "943b78cbf7740535"
+            ]
+        ],
+        "icon": "node-red-contrib-alexa-remote2-applestrudel/alexa-remote-list.png"
+    },
+    {
+        "id": "4b8861199af88f49",
+        "type": "function",
+        "z": "368dca3c8504b329",
+        "g": "0711f2ffaad25b9a",
+        "name": "Delete Item",
+        "func": "// FUNCTION\n// A function to delete the nth item in the items array\n//\n// INPUTS \n// flow.items: The persistant store of items\n// msg.index - The index of the item to be deleted\n//\n// OUTPUTS\n// flow.items: An updated persistant store of items\n// msg.payload : The updated array of items\n//\nvar items = flow.get(\"items\") || [];\nvar n = Number(msg.index)\n// Delete the nth element of an array\nvar updatedItems = items.slice(0, n).concat(items.slice(n + 1));\nflow.set(\"items\", updatedItems);\nmsg.payload = updatedItems;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 1960,
+        "wires": [
+            [
+                "ab13a699103fa709"
+            ]
+        ]
+    },
+    {
+        "id": "ab13a699103fa709",
+        "type": "link out",
+        "z": "368dca3c8504b329",
+        "g": "0711f2ffaad25b9a",
+        "name": "Delete Item Complete",
+        "mode": "link",
+        "links": [
+            "6abb508768e80cf9"
+        ],
+        "x": 1335,
+        "y": 1920,
+        "wires": []
+    },
+    {
+        "id": "9359fdb60b041e69",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "0711f2ffaad25b9a",
+        "name": "Delete Item?",
+        "property": "nav.command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "cancel",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "delete",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 780,
+        "y": 1940,
+        "wires": [
+            [
+                "ab13a699103fa709"
+            ],
+            [
+                "4b8861199af88f49",
+                "4f3c544860532f36"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "943b78cbf7740535",
+        "type": "switch",
+        "z": "368dca3c8504b329",
+        "g": "0711f2ffaad25b9a",
+        "name": "Leave Screen?",
+        "property": "nav.command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 550,
+        "y": 1940,
+        "wires": [
+            [
+                "9359fdb60b041e69"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "87bc3ac7198c582a",
+        "type": "subflow:f44bcc2212e6a685",
+        "z": "368dca3c8504b329",
+        "d": true,
+        "g": "aff99f9392aa1350",
+        "name": "",
+        "x": 300,
+        "y": 1180,
+        "wires": [
+            [
+                "7f7a7ffad559db6a"
+            ]
+        ]
+    },
+    {
+        "id": "ed06df27d169ef82",
+        "type": "subflow:b049e1c1ebe24c93",
+        "z": "368dca3c8504b329",
+        "d": true,
+        "g": "593d5c7386216e2a",
+        "name": "",
+        "x": 320,
+        "y": 1360,
+        "wires": [
+            [
+                "09ed02241447d40b"
+            ]
+        ]
+    },
+    {
+        "id": "33630cc8bc245ea9",
+        "type": "subflow:456d3f8f336fc951",
+        "z": "368dca3c8504b329",
+        "d": true,
+        "g": "dd2bcaacc7849c0e",
+        "name": "",
+        "x": 1080,
+        "y": 1800,
+        "wires": [
+            [
+                "cb6a965ba11e6531"
+            ]
+        ]
+    },
+    {
+        "id": "4f3c544860532f36",
+        "type": "subflow:f3972da6c7fb241a",
+        "z": "368dca3c8504b329",
+        "d": true,
+        "g": "0711f2ffaad25b9a",
+        "name": "",
+        "x": 1070,
+        "y": 2020,
+        "wires": [
+            [
+                "ab13a699103fa709"
+            ]
+        ]
+    },
+    {
+        "id": "350f22cc35e9c388",
+        "type": "subflow:113dc517988d056f",
+        "z": "368dca3c8504b329",
+        "d": true,
+        "g": "5e16978c52562be5",
+        "name": "",
+        "x": 1050,
+        "y": 1580,
+        "wires": [
+            [
+                "1cab3a02330d48cd"
+            ]
+        ]
+    },
+    {
+        "id": "ce3126643e312ff0",
+        "type": "inject",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "Initialise Items (Flow Variant)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 260,
+        "y": 740,
+        "wires": [
+            [
+                "8c70c667a7a15534"
+            ]
+        ]
+    },
+    {
+        "id": "6608ceb58338a88c",
+        "type": "inject",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "On Startup",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 700,
+        "wires": [
+            [
+                "58af83c16d4175d7"
+            ]
+        ]
+    },
+    {
+        "id": "58af83c16d4175d7",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "Clear Items (Flow Variant)",
+        "rules": [
+            {
+                "t": "set",
+                "p": "items",
+                "pt": "flow",
+                "to": "[]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8c70c667a7a15534",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "Initialise Items (Flow Variant)",
+        "rules": [
+            {
+                "t": "set",
+                "p": "items",
+                "pt": "flow",
+                "to": "[{\"name\":\"Go Shopping\",\"type\":\"Family\",\"priority\":\"2\",\"status\":\"0\"},{\"name\":\"Renew car insurance\",\"type\":\"Family\",\"priority\":\"1\",\"status\":\"0\"},{\"name\":\"Wash the dog\",\"type\":\"Personal\",\"priority\":\"3\",\"status\":\"0\"}]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 540,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "41a0517ffb4273bc",
+        "type": "file",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "Initialise items File",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1090,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cebfa2e0256ecf12",
+        "type": "file",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "Delete items File",
+        "filename": "items.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "delete",
+        "encoding": "none",
+        "x": 510,
+        "y": 780,
+        "wires": [
+            [
+                "b72109143573ebc8"
+            ]
+        ]
+    },
+    {
+        "id": "6485631ad0813071",
+        "type": "inject",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "Initialise Items (File Variant)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 250,
+        "y": 780,
+        "wires": [
+            [
+                "cebfa2e0256ecf12"
+            ]
+        ]
+    },
+    {
+        "id": "b72109143573ebc8",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "Initialise Items (File Variant)",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "[{\"name\":\"Go Shopping\",\"type\":\"Family\",\"priority\":\"2\",\"status\":\"1\"},{\"name\":\"Renew car insurance\",\"type\":\"Family\",\"priority\":\"1\",\"status\":\"1\"},{\"name\":\"Build a ticker device\",\"type\":\"Personal\",\"priority\":\"3\",\"status\":\"1\"}]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 820,
+        "y": 780,
+        "wires": [
+            [
+                "41a0517ffb4273bc"
+            ]
+        ]
+    },
+    {
+        "id": "6a9e1286b40e8905",
+        "type": "inject",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "On Startup",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 660,
+        "wires": [
+            [
+                "aa660814079c7a58"
+            ]
+        ]
+    },
+    {
+        "id": "aa660814079c7a58",
+        "type": "change",
+        "z": "368dca3c8504b329",
+        "g": "8cdbf647dc9603dc",
+        "name": "Initialise Navigation Rules",
+        "rules": [
+            {
+                "t": "set",
+                "p": "navRules",
+                "pt": "flow",
+                "to": "[{\"currentScreen\":\"splashScreen\",\"command\":\"\",\"nextScreen\":\"displayItems\"},{\"currentScreen\":\"displayItems\",\"command\":\"add\",\"nextScreen\":\"addItem\"},{\"currentScreen\":\"displayItems\",\"command\":\"displayItemDetails\",\"nextScreen\":\"displayItemDetails\"},{\"currentScreen\":\"displayItemDetails\",\"command\":\"cancel\",\"nextScreen\":\"displayItems\"},{\"currentScreen\":\"displayItemDetails\",\"command\":\"edit\",\"nextScreen\":\"editItem\"},{\"currentScreen\":\"displayItemDetails\",\"command\":\"delete\",\"nextScreen\":\"deleteItem\"},{\"currentScreen\":\"addItem\",\"command\":\"cancel\",\"nextScreen\":\"displayItems\"},{\"currentScreen\":\"addItem\",\"command\":\"save\",\"nextScreen\":\"displayItems\"},{\"currentScreen\":\"editItem\",\"command\":\"cancel\",\"nextScreen\":\"displayItemDetails\"},{\"currentScreen\":\"editItem\",\"command\":\"save\",\"nextScreen\":\"displayItemDetails\"},{\"currentScreen\":\"deleteItem\",\"command\":\"cancel\",\"nextScreen\":\"displayItemDetails\"},{\"currentScreen\":\"deleteItem\",\"command\":\"delete\",\"nextScreen\":\"displayItems\"}]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0e57d492e174eb63",
+        "type": "comment",
+        "z": "368dca3c8504b329",
+        "g": "7f304afe3af6560e",
+        "name": "ICONS LIBRARY - https://pictogrammers.com/library/mdi/",
+        "info": "",
+        "x": 370,
+        "y": 3000,
+        "wires": []
+    },
+    {
+        "id": "7f7a7ffad559db6a",
+        "type": "ui-template",
+        "z": "368dca3c8504b329",
+        "g": "aff99f9392aa1350",
+        "group": "59aa511bdd3cd7d8",
+        "page": "",
+        "ui": "",
+        "name": "Display Items V14",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<! --------------------------------------------------------------------------------------------------->\n<! -- DISPLAY ITEMS  <li>{{index1}} {{index2}} {{`${d.calendarEvents[`${index2}`].value}`}} </li> -->\n<! --------------------------------------------------------------------------------------------------->\n\n<template>\n\n    <! -- HEADER -->\n    <div id=\"headingDiv\">\n        <table class=\"headerSection\">\n            <tr>\n                <td class=\"headerLeft\">\n                    <v-btn :icon=\"`${leftIcon}`\" variant=plain @click=\"msgSendOutput('exit')\"></v-btn>\n                </td>\n                <td class=\"screenTitle\">\n                    <span style=\"color: white; font-size: 32px;\" class=\"screenTitle\">{{screenTitle}}</span>\n                </td>\n                <td class=\"headerRight\">\n                    <v-btn :icon=\"`${rightIcon}`\" variant=plain  @click=\"msgSendOutput('add')\"></v-btn>\n                </td>\n            </tr>\n        </table>\n    </div>\n\n    <! -- ITEMS -->\n    <div class=\"d-flex justify-center ma-4\">\n\n        <v-card flat style=\"background-color: transparent; border: 0;\" width=\"100%\">\n\n            <! -- CARD TITLE -->\n                <v-card-title class=\"mb-0\"></v-card-title>\n                <v-card-subtitle></v-card-subtitle>\n\n                <! -- CARD CONTENTS -->\n                    <v-card-text style=\"background-color: white; color: black; border: 0px solid black\" class=\"itemTable ml-0 mr-0 mt-0 mb-3  pl-0 pr-0 pt-0 pb-1 \" v-for=\"(i, index) in items\">\n\n\n                        <v-row align=\"left\" no-gutters >\n                            <v-col class=\"text-left ma-0 pa-0\" cols=\"12\">\n                                <v-btn v-if=\"`${i.status}`=== '1'\" prepend-icon=\"mdi-check\" variant=plain size=\"x-large\" @click=\"msgSendOutput('displayItemDetails',`${index}`)\">{{ i.name }}</v-btn>\n                                <v-btn v-else prepend-icon=\"mdi-clipboard-text\" variant=plain size=\"x-large\" @click=\"msgSendOutput('displayItemDetails',`${index}`)\">{{ i.name }}</v-btn>\n                            </v-col>\n                        </v-row>\n\n                        <v-row align=\"left\" no-gutters>\n                            <v-col class=\"text-left ma-0 pa-0\" cols=\"12\">\n                                <span class=\"ma-0 pl-14 pr-0 pt-0 pb-0\">{{ i.type }}</span>\n                            </v-col>\n                        </v-row>\n\n                        <v-row align=\"left\" no-gutters>\n                            <v-col class=\"text-left ma-0 pa-0\" cols=\"12\">\n                                <span class=\"ma-0 pl-14 pr-0 pt-0 pb-0\">{{ i.priority }}</span>\n                            </v-col>\n                        </v-row>\n\n                    </v-card-text>\n\n                    <! -- CARD ACTIONS -->\n                        <v-card-actions>\n                            <v-btn plain></v-btn>\n                        </v-card-actions>\n\n        </v-card>\n\n    </div>      \n\n</template>\n\n\n\n\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- SCRIPT SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n\n<script>\nexport default {\n\n    //---------------------------------------------------------------------------------------------\n    // COMPONENT VARIABLES - Define variables available component-wide (in <template> and component functions)\n    //---------------------------------------------------------------------------------------------\n    data() {\n        return {\n\n            // Items\n            items: [],\n\n            // TITLE BAR CONFIGURATION PARAMETERS\n            screenTitle: 'Items',           // Screen Title appears at the top centre of the title bar\n            leftIcon: '',                   // The icon that appears on the left hand side of the title bar\n            rightIcon: 'mdi-plus-thick',    // The icon that appears on the left hand side of the title bar\n            \n            \n            currentScreen: 'displayItems',\n\n            lastMsg: null,\n                        \n            // mounted semaphore\n            mounted: false\n\n        }\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // WATCH ITEMS - watch for any changes of variables\n    //---------------------------------------------------------------------------------------------\n    watch: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // COMPUTED ITEMS - automatically compute this variable whenever VueJS deems appropriate\n    //---------------------------------------------------------------------------------------------\n    computed: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // METHODS - Expose methods to our <template> and Vue Application\n    //---------------------------------------------------------------------------------------------\n    methods: {\n\n        // ---------------------------------------------------------------------------\n        // msgHandler - handles the update of the item variable\n        // ---------------------------------------------------------------------------\n        msgHandler(msg) {\n            if (msg.payload.length == 0) {\n                this.items = []                                     // Clear the items\n            } else {\n                // this.items = this.items.concat(msg.payload)      // Concatenate the msg to the items\n                this.items = msg.payload                           // Replace Items with the msg\n            }\n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgReceive - called each time a msg is received\n        // ---------------------------------------------------------------------------\n        msgReceive(msg) {\n            // alert('message received: ' + msg.payload);\n            // console.log(msg.payload);\n            // if (msg.payload.length == 0) { no payload found }\n        \n            // Handle the inbound msg - update the items variable\n            if (msg.payload.length == 0) {\n                this.items = []\n            } else {\n                this.items = msg.payload\n            }\n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgSendOutput - A method to send an output msg\n        // Always send the current state of items in the msg.payload so they can be retrieved when the page is reloaded.\n        // Send the navigation message in msg.nav\n        // ---------------------------------------------------------------------------\n        msgSendOutput(command, index) {\n            const message = new Object();\n            const navDetails = new Object();\n\n            navDetails.currentScreen = this.currentScreen;\n            navDetails.command = command;\n            message.payload = this.items;\n            message.nav = navDetails;\n            message.index = index;\n            this.send(message);\n        },\n\n        // ---------------------------------------------------------------------------\n        // msgSend - A method to send an output msg\n        // ---------------------------------------------------------------------------\n        msgSend(message) {\n        this.send(message);\n        },\n        \n        // ---------------------------------------------------------------------------\n        // onMounted - Called when the widget is mounted\n        // ---------------------------------------------------------------------------\n        onMounted() {\n        }\n\n    },\n  \n    //---------------------------------------------------------------------------------------------\n    // MOUNTED - The code in this section runs when the component is first loaded\n    //---------------------------------------------------------------------------------------------\n    mounted() {\n        this.mounted = true\n        \n        // ---------------------------------------------------------------------------\n        // An inbound message (msg) watcher that runs ONLY when a messages is received\n        // ---------------------------------------------------------------------------\n        this.$socket.on('msg-input:' + this.id, (msg) => {\n            this.msgReceive(msg);\n        });\n\n        // ---------------------------------------------------------------------------\n        // This message (msg) watcher only runs once when the component is loaded.\n        // Use it to retrive the state of items from the last msg sent from the component.\n        // ---------------------------------------------------------------------------\n        this.$socket.on('widget-load:' + this.id, (msg) => {\n            this.lastMsg = msg\n            this.items = msg.payload;\n        });\n\n        this.onMounted();\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // UNMOUNTED - The code in this section runs when the user navigates away from the page\n    //---------------------------------------------------------------------------------------------\n    unmounted() {\n    }\n}\n </script>\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- STYLE SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n<style>\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 610,
+        "y": 1120,
+        "wires": [
+            [
+                "0c9e3b61c7c70cf4"
+            ]
+        ],
+        "icon": "node-red-contrib-alexa-remote2-applestrudel/alexa-remote-list.png"
+    },
+    {
+        "id": "0a7fc821604c3ec1",
+        "type": "debug",
+        "z": "368dca3c8504b329",
+        "g": "dd2bcaacc7849c0e",
+        "name": "debug 2568",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 1780,
+        "wires": []
+    },
+    {
+        "id": "76be666bd6358ac3",
+        "type": "comment",
+        "z": "368dca3c8504b329",
+        "g": "7f304afe3af6560e",
+        "name": "Material Design Colours: https://materialui.co/colors",
+        "info": "",
+        "x": 350,
+        "y": 3040,
+        "wires": []
+    },
+    {
+        "id": "7aca0fd5d4b7b4fe",
+        "type": "comment",
+        "z": "368dca3c8504b329",
+        "g": "7f304afe3af6560e",
+        "name": "Material Design Default Font - Roboto - https://fonts.google.com/specimen/Roboto",
+        "info": "",
+        "x": 450,
+        "y": 3080,
+        "wires": []
+    },
+    {
+        "id": "d1b5bbf872161667",
+        "type": "ui-template",
+        "z": "368dca3c8504b329",
+        "d": true,
+        "g": "aff99f9392aa1350",
+        "group": "59aa511bdd3cd7d8",
+        "page": "",
+        "ui": "",
+        "name": "Display Items V13",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<! --------------------------------------------------------------------------------------------------->\n<! -- DISPLAY ITEMS  <li>{{index1}} {{index2}} {{`${d.calendarEvents[`${index2}`].value}`}} </li> -->\n<! --------------------------------------------------------------------------------------------------->\n\n<template>\n\n    <! -- HEADER -->\n    <div id=\"headingDiv\">\n        <table class=\"headerSection\">\n            <tr>\n                <td class=\"headerLeft\">\n                    <v-btn :icon=\"`${leftIcon}`\" variant=plain @click=\"msgSendOutput('exit')\"></v-btn>\n                </td>\n                <td class=\"screenTitle\">\n                    <span style=\"color: white; font-size: 32px;\" class=\"screenTitle\">{{screenTitle}}</span>\n                </td>\n                <td class=\"headerRight\">\n                    <v-btn :icon=\"`${rightIcon}`\" variant=plain  @click=\"msgSendOutput('add')\"></v-btn>\n                </td>\n            </tr>\n        </table>\n    </div>\n\n    <! -- ITEMS -->\n    <div class=\"d-flex justify-center ma-4\">\n\n        <v-card flat style=\"background-color: transparent; border: 0;\" width=\"100%\">\n\n            <! -- CARD TITLE -->\n                <v-card-title class=\"mb-0\"></v-card-title>\n                <v-card-subtitle></v-card-subtitle>\n\n                <! -- CARD CONTENTS -->\n                    <v-card-text style=\"background-color: white; color: black; border: 0px solid black\" class=\"itemTable ml-0 mr-0 mt-0 mb-3  pl-0 pr-0 pt-0 pb-1 \" v-for=\"(i, index) in items\">\n\n                        <v-row align=\"left\" no-gutters >\n                            <v-col class=\"text-left ma-0 pa-0\" cols=\"12\">\n                                <v-btn v-if=\"`${i.status}`=== '1'\" prepend-icon=\"mdi-check\" variant=plain size=\"x-large\" @click=\"msgSendOutput('displayItemDetails',`${index}`)\">{{ i.name }}</v-btn>\n                                <v-btn v-else prepend-icon=\"mdi-clipboard-text\" variant=plain size=\"x-large\" @click=\"msgSendOutput('displayItemDetails',`${index}`)\">{{ i.name }}</v-btn>\n                            </v-col>\n                        </v-row>\n\n                        <v-row align=\"left\" no-gutters>\n                            <v-col class=\"text-left ma-0 pa-0\" cols=\"12\">\n                                <span class=\"ma-0 pl-14 pr-0 pt-0 pb-0\">{{ i.type }}</span>\n                            </v-col>\n                        </v-row>\n\n                        <v-row align=\"left\" no-gutters>\n                            <v-col class=\"text-left ma-0 pa-0\" cols=\"12\">\n                                <span class=\"ma-0 pl-14 pr-0 pt-0 pb-0\">{{ i.priority }}</span>\n                            </v-col>\n                        </v-row>\n\n                    </v-card-text>\n\n                    <! -- CARD ACTIONS -->\n                        <v-card-actions>\n                            <v-btn plain></v-btn>\n                        </v-card-actions>\n\n        </v-card>\n\n    </div>      \n\n</template>\n\n\n\n\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- SCRIPT SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n\n<script>\nexport default {\n\n    //---------------------------------------------------------------------------------------------\n    // COMPONENT VARIABLES - Define variables available component-wide (in <template> and component functions)\n    //---------------------------------------------------------------------------------------------\n    data() {\n        return {\n\n            // Items\n            items: [],\n\n            // TITLE BAR CONFIGURATION PARAMETERS\n            screenTitle: 'Items',           // Screen Title appears at the top centre of the title bar\n            leftIcon: '',                   // The icon that appears on the left hand side of the title bar\n            rightIcon: 'mdi-plus-thick',    // The icon that appears on the left hand side of the title bar\n            \n            \n            currentScreen: 'displayItems',\n\n            lastMsg: null,\n                        \n            // mounted semaphore\n            mounted: false\n\n        }\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // WATCH ITEMS - watch for any changes of variables\n    //---------------------------------------------------------------------------------------------\n    watch: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // COMPUTED ITEMS - automatically compute this variable whenever VueJS deems appropriate\n    //---------------------------------------------------------------------------------------------\n    computed: {\n    },\n    \n    //---------------------------------------------------------------------------------------------\n    // METHODS - Expose methods to our <template> and Vue Application\n    //---------------------------------------------------------------------------------------------\n    methods: {\n\n        // ---------------------------------------------------------------------------\n        // msgHandler - handles the update of the item variable\n        // ---------------------------------------------------------------------------\n        msgHandler(msg) {\n            if (msg.payload.length == 0) {\n                this.items = []                                     // Clear the items\n            } else {\n                // this.items = this.items.concat(msg.payload)      // Concatenate the msg to the items\n                this.items = msg.payload                           // Replace Items with the msg\n            }\n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgReceive - called each time a msg is received\n        // ---------------------------------------------------------------------------\n        msgReceive(msg) {\n            // alert('message received: ' + msg.payload);\n            // console.log(msg.payload);\n            // if (msg.payload.length == 0) { no payload found }\n        \n            // Handle the inbound msg - update the items variable\n            if (msg.payload.length == 0) {\n                this.items = []\n            } else {\n                this.items = msg.payload\n            }\n        },\n        \n        // ---------------------------------------------------------------------------\n        // msgSendOutput - A method to send an output msg\n        // Always send the current state of items in the msg.payload so they can be retrieved when the page is reloaded.\n        // Send the navigation message in msg.nav\n        // ---------------------------------------------------------------------------\n        msgSendOutput(command, index) {\n            const message = new Object();\n            const navDetails = new Object();\n\n            navDetails.currentScreen = this.currentScreen;\n            navDetails.command = command;\n            message.payload = this.items;\n            message.nav = navDetails;\n            message.index = index;\n            this.send(message);\n        },\n\n        // ---------------------------------------------------------------------------\n        // msgSend - A method to send an output msg\n        // ---------------------------------------------------------------------------\n        msgSend(message) {\n        this.send(message);\n        },\n        \n        // ---------------------------------------------------------------------------\n        // onMounted - Called when the widget is mounted\n        // ---------------------------------------------------------------------------\n        onMounted() {\n        }\n\n    },\n  \n    //---------------------------------------------------------------------------------------------\n    // MOUNTED - The code in this section runs when the component is first loaded\n    //---------------------------------------------------------------------------------------------\n    mounted() {\n        this.mounted = true\n        \n        // ---------------------------------------------------------------------------\n        // An inbound message (msg) watcher that runs ONLY when a messages is received\n        // ---------------------------------------------------------------------------\n        this.$socket.on('msg-input:' + this.id, (msg) => {\n            this.msgReceive(msg);\n        });\n\n        // ---------------------------------------------------------------------------\n        // This message (msg) watcher only runs once when the component is loaded.\n        // Use it to retrive the state of items from the last msg sent from the component.\n        // ---------------------------------------------------------------------------\n        this.$socket.on('widget-load:' + this.id, (msg) => {\n            this.lastMsg = msg\n            this.items = msg.payload;\n        });\n\n        this.onMounted();\n    },\n\n    //---------------------------------------------------------------------------------------------\n    // UNMOUNTED - The code in this section runs when the user navigates away from the page\n    //---------------------------------------------------------------------------------------------\n    unmounted() {\n    }\n}\n </script>\n\n\n<! --------------------------------------------------------------------------------------------------->\n<! -- STYLE SECTION -->\n<! --------------------------------------------------------------------------------------------------->\n<style>\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 610,
+        "y": 1180,
+        "wires": [
+            []
+        ],
+        "icon": "node-red-contrib-alexa-remote2-applestrudel/alexa-remote-list.png"
+    },
+    {
+        "id": "e0d0fbbbefdc4947",
+        "type": "comment",
+        "z": "368dca3c8504b329",
+        "g": "7f304afe3af6560e",
+        "name": "Vuetify & VueJS Discord Community - https://community.vuetifyjs.com/?utm_source=vuetifyads&utm_medium=promoted",
+        "info": "",
+        "x": 570,
+        "y": 3120,
+        "wires": []
+    },
+    {
+        "id": "2e70fedfc2533c6c",
+        "type": "comment",
+        "z": "368dca3c8504b329",
+        "g": "7f304afe3af6560e",
+        "name": "Node-RED Forum - https://discourse.nodered.org",
+        "info": "",
+        "x": 350,
+        "y": 3160,
+        "wires": []
+    },
+    {
+        "id": "149ac467d70347fa",
+        "type": "comment",
+        "z": "368dca3c8504b329",
+        "g": "7f304afe3af6560e",
+        "name": "Node-RED Dashboard 2.0 Forum - https://discourse.nodered.org/c/dashboard/5",
+        "info": "",
+        "x": 440,
+        "y": 3200,
+        "wires": []
+    },
+    {
+        "id": "dd167fe3689de9d7",
+        "type": "comment",
+        "z": "368dca3c8504b329",
+        "name": "An example of a Mobile App written in Node-RED Dashboard 2.0. \\n HIGHLIGHTS \\n 1) The target device is a Mobile smartphone. First and last. \\n  2) The App has Display, Add, Edit and Delete (CRUD) capabilities.  \\n 3) There is a consistent look and feel across the App \\n  4) The App has an intuitive look & feel.  \\n 5) The App consists of 5 interconnected screens, plus a Splash Screen \\n 6) The display part of each screen is built with a paramerised version of a single D2.0 Template node. \\n 7) The App has been implemented with only standard Node-RED and Dashboard 2.0 nodes.  \\n 8) The app uses a centralised, rules-based Navigation Service to route the flow between screens. The Navigation Service is Independant from the screen definitions. \\n 9) The Data Persistance Service is plug-and-play. \\n      I.e. It is possible to unplug the the Node-RED Context Data variant of the Data Persistance service and replace it with another variant which stores data in a different data stores. \\n E.g. A flat files variant, a MySQL variant, a SQL Server variant, etc.",
+        "info": "",
+        "x": 690,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "3914e91cd622d268",
+        "type": "ui-group",
+        "name": "Display Item",
+        "page": "39bc1fa718f94877",
+        "width": "3",
+        "height": "1",
+        "order": 1,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "6ced0a490ad067f5",
+        "type": "ui-group",
+        "name": "Splash Screen",
+        "page": "4c143a0d4276f48d",
+        "width": "3",
+        "height": "14",
+        "order": 2,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "3373ac92ea949a80",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "http://automationbox:1880/todoIcon2-192x192.jpg",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": true,
+        "showPageTitle": false,
+        "navigationStyle": "none",
+        "titleBarStyle": "hidden",
+        "showReconnectNotification": false,
+        "notificationDisplayTime": "5",
+        "showDisconnectNotification": false
+    },
+    {
+        "id": "bee4da1270d007fe",
+        "type": "ui-group",
+        "name": "Add Item",
+        "page": "8475f556292991d8",
+        "width": "3",
+        "height": "1",
+        "order": 1,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "65aad6fbc197e141",
+        "type": "ui-group",
+        "name": "Edit Item",
+        "page": "947184ae39645d0d",
+        "width": "3",
+        "height": "1",
+        "order": 1,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "6360235bc0e8c794",
+        "type": "ui-group",
+        "name": "Delete Item",
+        "page": "b98d6167158fc92f",
+        "width": "3",
+        "height": "1",
+        "order": 1,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "59aa511bdd3cd7d8",
+        "type": "ui-group",
+        "name": "Display Items",
+        "page": "4c47c450ad3ad8c3",
+        "width": "3",
+        "height": "1",
+        "order": 1,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "39bc1fa718f94877",
+        "type": "ui-page",
+        "name": "Display Item",
+        "ui": "3373ac92ea949a80",
+        "path": "/displayItem",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "f90ae1fe35e9497d",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 14,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    },
+    {
+        "id": "4c143a0d4276f48d",
+        "type": "ui-page",
+        "name": "SplashScreen",
+        "ui": "3373ac92ea949a80",
+        "path": "/splashScreen",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "f90ae1fe35e9497d",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    },
+    {
+        "id": "8475f556292991d8",
+        "type": "ui-page",
+        "name": "Add Item",
+        "ui": "3373ac92ea949a80",
+        "path": "/addItem",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "f90ae1fe35e9497d",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 15,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "947184ae39645d0d",
+        "type": "ui-page",
+        "name": "Edit Item",
+        "ui": "3373ac92ea949a80",
+        "path": "/editItem",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "f90ae1fe35e9497d",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 16,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "b98d6167158fc92f",
+        "type": "ui-page",
+        "name": "Delete Item",
+        "ui": "3373ac92ea949a80",
+        "path": "/deleteItem",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "f90ae1fe35e9497d",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 17,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    },
+    {
+        "id": "4c47c450ad3ad8c3",
+        "type": "ui-page",
+        "name": "Display Items",
+        "ui": "3373ac92ea949a80",
+        "path": "/displayItems",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "f90ae1fe35e9497d",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 13,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    },
+    {
+        "id": "f90ae1fe35e9497d",
+        "type": "ui-theme",
+        "name": "SmartThings Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0433ff",
+            "bgPage": "#48acd1",
+            "groupBg": "#48acd1",
+            "groupOutline": "#48acd1"
+        },
+        "sizes": {
+            "density": "compact",
+            "pagePadding": "0px",
+            "groupGap": "12px",
+            "groupBorderRadius": "0px",
+            "widgetGap": "12px"
+        }
+    }
+]
